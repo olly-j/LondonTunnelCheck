@@ -111,11 +111,13 @@
       outline: 2px solid #007aff;
     }
 
+    /* Make the title text easier to read with a subtle shadow & color */
     h1 {
       margin-bottom: 1rem;
-      color: #333;
+      color: #eee;
       font-size: 2rem;
       font-weight: 700;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
     }
 
     main {
@@ -140,6 +142,37 @@
       text-align: center;
       border: 1px solid #e0e0e0;
       flex: 1;
+    }
+
+    /* Adjust top margin for countdown so question button doesn't overlap */
+    .countdown {
+      margin-top: 2.5rem; /* push countdown text further down */
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #d9534f;
+      margin-bottom: 1rem;
+    }
+
+    /* Info Button (Question Mark) */
+    .info-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+    .info-btn:hover {
+      background: #005bb5;
     }
 
     /* Image Container (Right Column) */
@@ -168,36 +201,6 @@
       color: #555;
       text-align: left;
       line-height: 1.4;
-    }
-
-    /* Info Button (Question Mark) */
-    .info-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: #007aff;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      transition: background 0.3s;
-    }
-    .info-btn:hover {
-      background: #005bb5;
-    }
-
-    /* Countdown Timer */
-    .countdown {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #d9534f;
-      margin-bottom: 1rem;
     }
 
     /* Form Items */
@@ -369,13 +372,15 @@
       margin-top: 20px;
       text-align: center;
       font-size: 0.85rem;
-      color: #aaa;
+      color: #eee; /* Lighter color for readability */
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
     }
   </style>
 </head>
 <body>
   <header>
     <div id="languageSelector">
+      <!-- Each button calls setLanguage(...) -->
       <button class="flag-btn" onclick="setLanguage('en')" aria-label="English">🇬🇧</button>
       <button class="flag-btn" onclick="setLanguage('fr')" aria-label="Français">🇫🇷</button>
       <button class="flag-btn" onclick="setLanguage('de')" aria-label="Deutsch">🇩🇪</button>
@@ -389,8 +394,11 @@
     <div class="content-wrapper">
       <!-- Left: Form Container -->
       <div class="form-container">
+        <!-- A question mark button for instructions modal -->
         <button class="info-btn" aria-label="Instructions & Fee Schedule" onclick="openModal('instructions')">?</button>
+        <!-- Countdown Timer -->
         <div id="countdown" class="countdown" aria-live="polite"></div>
+        
         <form id="feeForm">
           <div class="form-group">
             <label for="day" id="dayLabel">Day</label>
@@ -406,11 +414,13 @@
               <option value="Christmas Day">Christmas Day</option>
             </select>
           </div>
+          
           <div class="form-group">
             <label for="time" id="timeLabel">Time</label>
             <input type="time" id="time" placeholder="HH:MM" required>
             <div class="helper-text" id="timeHelper">Format: HH:MM (e.g., 14:30)</div>
           </div>
+          
           <div class="form-group">
             <label for="vehicle" id="vehicleLabel">Vehicle Type</label>
             <select id="vehicle" required>
@@ -421,8 +431,10 @@
               <option value="heavy">Heavy Goods Vehicles</option>
             </select>
           </div>
+          
           <button type="button" class="primary-btn" id="calculateButton" onclick="calculateFee()">Calculate Fee</button>
         </form>
+        
         <div class="result" id="result" aria-live="polite"></div>
       </div>
       
@@ -452,7 +464,7 @@
       <span id="closeModalInstructions" class="close" aria-label="Close" tabindex="0">&times;</span>
       <h2 id="modalInstructionsTitle">Instructions & Fee Schedule</h2>
       <div id="modalInstructionsContent">
-        <!-- Dynamically inserted via setLanguage(...) -->
+        <!-- Dynamically updated based on language -->
       </div>
     </div>
   </div>
@@ -467,10 +479,16 @@
   
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      /**********************/
+      /* Global Variables   */
+      /**********************/
       let currentLanguage = 'en';
       let previousActiveElement = null;
       let countdownInterval;
-      
+
+      /**********************/
+      /* Translations Object (same as before) */
+      /**********************/
       const translations = {
         /* Insert your translations here exactly as previously defined */
         en: {header: "Tunnel Fee Calculator",
@@ -604,7 +622,10 @@
           footer: "Olly Jeffers. 版权所有。",
           tunnelInfo: "<strong>Blackwall隧道</strong>连接Greenwich Peninsula西侧的A102与Poplar的A12。<br><br><strong>Silvertown隧道</strong>连接Greenwich Peninsula东侧与A1026 Lower Lea Crossing、A13及其他本地目的地。<br><br>两条隧道连接A102，将河流两侧相连。收费自2025年4月7日起生效。"}
       };
-      
+
+      /**********************/
+      /* Focus Trap & Modals*/
+      /**********************/
       function trapFocus(modal) {
         const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
         const focusableElements = modal.querySelectorAll(focusableSelectors);
@@ -627,7 +648,7 @@
           }
         });
       }
-      
+
       window.openModal = function(type) {
         previousActiveElement = document.activeElement;
         let modal = null;
@@ -642,7 +663,7 @@
           modal.focus();
         }
       };
-      
+
       window.closeModal = function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
@@ -652,11 +673,15 @@
           previousActiveElement.focus();
         }
       };
-      
+
+      /**********************/
+      /* Multi-Language     */
+      /**********************/
       window.setLanguage = function(lang) {
         currentLanguage = lang;
         const texts = translations[lang];
         
+        // Update heading / form labels
         document.getElementById("pageHeader").textContent = texts.header;
         document.getElementById("dayLabel").textContent = texts.dayLabel;
         document.getElementById("timeLabel").textContent = texts.timeLabel;
@@ -664,6 +689,7 @@
         document.getElementById("timeHelper").textContent = texts.timeHelper;
         document.getElementById("calculateButton").textContent = texts.calculateButton;
         
+        // Update instructions modal
         document.getElementById("modalInstructionsTitle").textContent = texts.instructionsTitle;
         document.getElementById("modalInstructionsContent").innerHTML = `
           <p>${texts.instructionsText}</p>
@@ -714,17 +740,20 @@
             </tbody>
           </table>
         `;
-        
+
+        // Update tunnel info & footer
         document.getElementById("tunnelInfo").innerHTML = texts.tunnelInfo;
         document.getElementById("pageFooter").innerHTML = `&copy; ${new Date().getFullYear()} ${texts.footer}`;
-        
+
+        // Refresh countdown text in chosen language
         updateCountdown();
       };
-      
-      /* Countdown Timer Logic */
+
+      /**********************/
+      /* Countdown Timer    */
+      /**********************/
       const targetDate = new Date("2025-04-07T00:00:00");
       const countdownElem = document.getElementById("countdown");
-      
       function updateCountdown() {
         const now = new Date();
         const diff = targetDate - now;
@@ -737,55 +766,55 @@
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
         const seconds = Math.floor((diff / 1000) % 60);
-        
+
         let countText = translations[currentLanguage].countdown;
         countText = countText
           .replace("{days}", days)
           .replace("{hours}", hours)
           .replace("{minutes}", minutes)
           .replace("{seconds}", seconds);
-        
+
         countdownElem.textContent = countText;
       }
       countdownInterval = setInterval(updateCountdown, 1000);
       updateCountdown();
 
-      /* Fee Calculation */
+      /**********************/
+      /* Fee Calculation    */
+      /**********************/
       window.calculateFee = function() {
         const day = document.getElementById("day").value;
         const timeInput = document.getElementById("time").value;
         const vehicle = document.getElementById("vehicle").value;
         const resultDiv = document.getElementById("result");
-        
+
         if (!day || !timeInput || !vehicle) {
           resultDiv.style.display = "block";
           resultDiv.textContent = translations[currentLanguage].fillFieldsError;
           return;
         }
-        
+
         const [hourStr, minuteStr] = timeInput.split(":");
         const hours = parseInt(hourStr, 10);
         const minutes = parseInt(minuteStr, 10);
         const totalMinutes = hours * 60 + minutes;
-        
+
         if (day === "Christmas Day" || totalMinutes < 360 || totalMinutes >= 1320) {
           resultDiv.style.display = "block";
           resultDiv.textContent = translations[currentLanguage].noCharge;
           return;
         }
-        
+
         const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
         const isWeekday = weekdays.includes(day);
-        
-        /* Peak periods */
+
         const inMorningPeak = isWeekday && (totalMinutes >= 360 && totalMinutes < 600);
         const inEveningPeak = isWeekday && (totalMinutes >= 960 && totalMinutes < 1140);
-        
+
         const feesOffPeak = { motorcycle: 1.50, car: 1.50, largeVan: 2.50, heavy: 5.00 };
         const feesPeak = { motorcycle: 2.50, car: 4.00, largeVan: 6.50, heavy: 10.00 };
-        
+
         let resultHTML = "";
-        
         if (inMorningPeak) {
           const feeNorth = feesPeak[vehicle];
           const feeSouth = feesOffPeak[vehicle];
@@ -800,28 +829,27 @@
           const fee = feesOffPeak[vehicle];
           resultHTML = "<strong>Charge (Off-Peak):</strong> £" + fee.toFixed(2);
         }
-        
+
         resultDiv.style.display = "block";
         resultDiv.innerHTML = resultHTML;
       };
-      
-      /* Modal Event Listeners */
+
+      /*********************/
+      /* Modal Listeners   */
+      /*********************/
       document.getElementById("closeModalInstructions").addEventListener("click", function() {
         closeModal("modalInstructions");
       });
       document.getElementById("closeModalInstructions").addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-          closeModal("modalInstructions");
-        }
+        if (e.key === "Enter") closeModal("modalInstructions");
       });
       document.getElementById("closeModalImage").addEventListener("click", function() {
         closeModal("modalImage");
       });
       document.getElementById("closeModalImage").addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-          closeModal("modalImage");
-        }
+        if (e.key === "Enter") closeModal("modalImage");
       });
+
       window.addEventListener("click", function(event) {
         const instructionsModal = document.getElementById("modalInstructions");
         const imageModal = document.getElementById("modalImage");
@@ -832,14 +860,15 @@
           closeModal("modalImage");
         }
       });
+
       window.addEventListener("keydown", function(event) {
         if (event.key === "Escape") {
           closeModal("modalInstructions");
           closeModal("modalImage");
         }
       });
-      
-      /* Language defaults to English */
+
+      // Default to English
       setLanguage("en");
     });
   </script>
