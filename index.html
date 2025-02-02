@@ -85,6 +85,7 @@
       max-width: 100%;
       height: auto;
       border-radius: 8px;
+      cursor: pointer;
     }
     
     .image-container p {
@@ -203,7 +204,7 @@
       display: none;
     }
     
-    /* Modal styling */
+    /* Modal styling (for both instructions and image popup) */
     .modal {
       display: none;
       position: fixed;
@@ -229,6 +230,13 @@
       max-height: 90vh;
       overflow-y: auto;
       text-align: left;
+    }
+    
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
     }
     
     .modal-content h2,
@@ -318,7 +326,7 @@
     <!-- Left: Form Container -->
     <div class="form-container">
       <!-- Info button (question mark icon) -->
-      <button class="info-btn" aria-label="Instructions &amp; Fee Schedule" onclick="openModal()">?</button>
+      <button class="info-btn" aria-label="Instructions &amp; Fee Schedule" onclick="openModal('instructions')">?</button>
       <!-- Countdown Timer -->
       <div id="countdown" class="countdown"></div>
       <h1>Tunnel Fee Calculator</h1>
@@ -360,7 +368,9 @@
     
     <!-- Right: Image Container (displayed side-by-side on wide screens) -->
     <div class="image-container">
-      <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" alt="Map of Blackwall and Silvertown Tunnels">
+      <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" 
+           alt="Map of Blackwall and Silvertown Tunnels" 
+           onclick="openModal('image')" />
       <p>
         <strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br>
         <strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>
@@ -375,9 +385,9 @@
   </footer>
   
   <!-- Modal Structure for Instructions & Fee Schedule -->
-  <div id="modal" class="modal" role="dialog" aria-labelledby="modalTitle" tabindex="-1">
+  <div id="modalInstructions" class="modal" role="dialog" aria-labelledby="modalTitle" tabindex="-1">
     <div class="modal-content">
-      <span id="closeModal" class="close" aria-label="Close">&times;</span>
+      <span id="closeModalInstructions" class="close" aria-label="Close">&times;</span>
       <h2 id="modalTitle">Instructions &amp; Fee Schedule</h2>
       <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
       <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
@@ -426,6 +436,14 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+  
+  <!-- Modal Structure for Full-Size Image -->
+  <div id="modalImage" class="modal" role="dialog" tabindex="-1">
+    <div class="modal-content">
+      <span id="closeModalImage" class="close" aria-label="Close">&times;</span>
+      <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" alt="Full Map of Blackwall and Silvertown Tunnels" />
     </div>
   </div>
   
@@ -531,29 +549,48 @@
     }
     
     // Modal functions
-    function openModal() {
-      document.getElementById("modal").style.display = "flex";
-      document.getElementById("modal").focus();
+    // Opens modal based on type: "instructions" or "image"
+    function openModal(type) {
+      if (type === "instructions") {
+        document.getElementById("modalInstructions").style.display = "flex";
+        document.getElementById("modalInstructions").focus();
+      } else if (type === "image") {
+        document.getElementById("modalImage").style.display = "flex";
+        document.getElementById("modalImage").focus();
+      }
     }
     
-    function closeModal() {
-      document.getElementById("modal").style.display = "none";
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
     }
     
-    document.getElementById("closeModal").addEventListener("click", closeModal);
+    // Close modal when clicking on close button (instructions)
+    document.getElementById("closeModalInstructions").addEventListener("click", function() {
+      closeModal("modalInstructions");
+    });
     
-    // Close the modal when clicking outside the modal content.
+    // Close modal when clicking on close button (image)
+    document.getElementById("closeModalImage").addEventListener("click", function() {
+      closeModal("modalImage");
+    });
+    
+    // Close the modal when clicking outside the modal content for both modals
     window.addEventListener("click", function(event) {
-      const modal = document.getElementById("modal");
-      if (event.target === modal) {
-        closeModal();
+      const modalInstructions = document.getElementById("modalInstructions");
+      const modalImage = document.getElementById("modalImage");
+      if (event.target === modalInstructions) {
+        closeModal("modalInstructions");
+      }
+      if (event.target === modalImage) {
+        closeModal("modalImage");
       }
     });
     
-    // Close modal on Escape key press.
+    // Close modals on Escape key press.
     window.addEventListener("keydown", function(event) {
       if (event.key === "Escape") {
-        closeModal();
+        closeModal("modalInstructions");
+        closeModal("modalImage");
       }
     });
   </script>
