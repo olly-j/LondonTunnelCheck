@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tunnel Fee Calculator</title>
   
-  <!-- SEO Meta Tags (optional but recommended) -->
+  <!-- SEO Meta Tags -->
   <meta name="description" content="Tunnel Fee Calculator is a modern, responsive tool for calculating toll fees for Blackwall and Silvertown Tunnels. Features include a live countdown timer, fee schedule with table, multi-language support, and a full-size map popup." />
   <meta name="keywords" content="Tunnel Fee Calculator, Blackwall Tunnel, Silvertown Tunnel, toll fee, countdown timer, fee table, multi-language, responsive web app" />
   <meta name="robots" content="index,follow" />
@@ -42,7 +42,7 @@
   }
   </script>
   
-  <!-- Import Google Fonts: Inter -->
+  <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   
   <style>
@@ -91,10 +91,10 @@
     header {
       margin-bottom: 20px;
       text-align: center;
-      padding-top: 10px; /* Extra space for language selector */
+      padding-top: 10px; /* Space for language flags */
       position: relative;
     }
-    /* Flag-based Language Selector (displayed inline at the top) */
+    /* Flag-based Language Selector (top, inline, right-aligned) */
     #languageSelector {
       text-align: right;
       margin-bottom: 10px;
@@ -267,6 +267,9 @@
       justify-content: center;
       align-items: center;
     }
+    .modal.active {
+      display: flex;
+    }
     .modal-content {
       background-color: #fff;
       border-radius: 12px;
@@ -358,7 +361,7 @@
 </head>
 <body>
   <header>
-    <!-- Flag-based Language Selector (Top-Right) -->
+    <!-- Flag-based Language Selector (Displayed inline at top-right) -->
     <div id="languageSelector">
       <button class="flag-btn" onclick="setLanguage('en')" aria-label="English">🇬🇧</button>
       <button class="flag-btn" onclick="setLanguage('fr')" aria-label="Français">🇫🇷</button>
@@ -656,16 +659,12 @@
     function setLanguage(lang) {
       currentLanguage = lang;
       const texts = translations[lang];
-      // Update header text
       document.getElementById("pageHeader").textContent = texts.header;
-      // Update form labels and helper text
       document.getElementById("dayLabel").textContent = texts.dayLabel;
       document.getElementById("timeLabel").textContent = texts.timeLabel;
       document.getElementById("vehicleLabel").textContent = texts.vehicleLabel;
       document.getElementById("timeHelper").textContent = texts.timeHelper;
-      // Update button text
       document.getElementById("calculateButton").textContent = texts.calculateButton;
-      // Update instructions modal texts
       document.getElementById("modalInstructionsTitle").textContent = texts.instructionsTitle;
       document.getElementById("modalInstructionsContent").innerHTML = `
         <p>${texts.instructionsText}</p>
@@ -716,14 +715,10 @@
           </tbody>
         </table>
       `;
-      // Update image container tunnel info text
       document.getElementById("tunnelInfo").innerHTML = texts.tunnelInfo;
-      // Update footer text
       document.getElementById("pageFooter").innerHTML = `&copy; ${new Date().getFullYear()} ${texts.footer}`;
-      // Update countdown to current language
       updateCountdown();
     }
-    // Initially set language to English
     setLanguage("en");
     
     /**********************
@@ -731,7 +726,7 @@
      **********************/
     let previousActiveElement = null;
     function trapFocus(modal) {
-      const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]';
+      const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
       const focusableElements = modal.querySelectorAll(focusableSelectors);
       if (!focusableElements.length) return;
       const firstElement = focusableElements[0];
@@ -754,21 +749,23 @@
     }
     function openModal(type) {
       previousActiveElement = document.activeElement;
+      let modal;
       if (type === "instructions") {
-        const modal = document.getElementById("modalInstructions");
-        modal.style.display = "flex";
-        trapFocus(modal);
-        modal.focus();
+        modal = document.getElementById("modalInstructions");
       } else if (type === "image") {
-        const modal = document.getElementById("modalImage");
-        modal.style.display = "flex";
+        modal = document.getElementById("modalImage");
+      }
+      if (modal) {
+        modal.classList.add("active");
         trapFocus(modal);
         modal.focus();
       }
     }
     function closeModal(modalId) {
       const modal = document.getElementById(modalId);
-      modal.style.display = "none";
+      if (modal) {
+        modal.classList.remove("active");
+      }
       if (previousActiveElement) {
         previousActiveElement.focus();
       }
