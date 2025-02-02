@@ -49,7 +49,7 @@
       100% { background-position: 0% 50%; }
     }
     
-    /* Page Layout */
+    /* Semantic Landmarks */
     header, main, footer {
       width: 100%;
       max-width: 1000px;
@@ -58,6 +58,18 @@
     header {
       text-align: center;
       margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Language selector styling */
+    .language-selector {
+      font-size: 0.9rem;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
     }
     
     main {
@@ -102,7 +114,6 @@
       height: auto;
       border-radius: 8px;
       cursor: pointer;
-      /* Make the image focusable */
       outline: none;
     }
     
@@ -141,6 +152,7 @@
       background: #005bb5;
     }
     
+    /* Heading */
     h1 {
       margin-bottom: 1rem;
       color: #333;
@@ -345,7 +357,15 @@
 </head>
 <body>
   <header>
-    <h1>Tunnel Fee Calculator</h1>
+    <!-- Language Selector -->
+    <select id="langSelector" class="language-selector" onchange="setLanguage(this.value)">
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+      <option value="zh">中文</option>
+    </select>
+    <h1 id="pageHeader">Tunnel Fee Calculator</h1>
   </header>
   
   <main>
@@ -358,7 +378,7 @@
         <div id="countdown" class="countdown" aria-live="polite"></div>
         <form id="feeForm">
           <div class="form-group">
-            <label for="day">Day</label>
+            <label for="day" id="dayLabel">Day</label>
             <select id="day" required>
               <option value="">--Select Day--</option>
               <option value="Monday">Monday</option>
@@ -372,12 +392,12 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="time">Time</label>
+            <label for="time" id="timeLabel">Time</label>
             <input type="time" id="time" placeholder="HH:MM" required>
-            <div class="helper-text">Format: HH:MM (e.g., 14:30)</div>
+            <div class="helper-text" id="timeHelper">Format: HH:MM (e.g., 14:30)</div>
           </div>
           <div class="form-group">
-            <label for="vehicle">Vehicle Type</label>
+            <label for="vehicle" id="vehicleLabel">Vehicle Type</label>
             <select id="vehicle" required>
               <option value="">--Select Vehicle Type--</option>
               <option value="motorcycle">Motorcycles, Mopeds, Tricycles</option>
@@ -386,7 +406,7 @@
               <option value="heavy">Heavy Goods Vehicles</option>
             </select>
           </div>
-          <button type="button" class="primary-btn" onclick="calculateFee()">Calculate Fee</button>
+          <button type="button" class="primary-btn" id="calculateButton" onclick="calculateFee()">Calculate Fee</button>
         </form>
         <!-- Hidden result box with ARIA live region -->
         <div class="result" id="result" aria-live="polite"></div>
@@ -394,13 +414,12 @@
       
       <!-- Right: Image Container -->
       <div class="image-container">
-        <!-- The image is made keyboard accessible via tabindex and keydown -->
         <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" 
              alt="Map of Blackwall and Silvertown Tunnels" 
              tabindex="0"
              onkeydown="if(event.key==='Enter'){ openModal('image'); }"
              onclick="openModal('image')" />
-        <p>
+        <p id="tunnelInfo">
           <strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br>
           <strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>
           Both tunnels connect the A102 between the south and north sides of the river. Charges come into effect from 7 April 2025.
@@ -409,7 +428,7 @@
     </div>
   </main>
   
-  <footer>
+  <footer id="pageFooter">
     &copy; <script>document.write(new Date().getFullYear());</script> Olly Jeffers. All rights reserved.
   </footer>
   
@@ -418,53 +437,55 @@
     <div class="modal-content">
       <span id="closeModalInstructions" class="close" aria-label="Close">&times;</span>
       <h2 id="modalInstructionsTitle">Instructions &amp; Fee Schedule</h2>
-      <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
-      <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
-      <p><strong>No Charges:</strong> 22:00 - 06:00 and on Christmas Day</p>
-      <h3>Weekdays (Monday to Friday):</h3>
-      <p>
-        <strong>Northbound:</strong> 06:00 - 10:00 (Peak), all other times off-peak<br>
-        <strong>Southbound:</strong> 16:00 - 19:00 (Peak), all other times off-peak
-      </p>
-      <h3>Weekends (Saturday &amp; Sunday):</h3>
-      <p>Both directions: Off-peak only (06:00 - 22:00)</p>
-      <h3>Fee Rates (Auto Pay):</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Vehicle Type</th>
-            <th>Off-Peak</th>
-            <th>Peak</th>
-            <th>Phone/Online</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Motorcycles, Mopeds, Tricycles</td>
-            <td>£1.50</td>
-            <td>£2.50</td>
-            <td>£2.50</td>
-          </tr>
-          <tr>
-            <td>Cars and Small Vans</td>
-            <td>£1.50</td>
-            <td>£4.00</td>
-            <td>£4.00</td>
-          </tr>
-          <tr>
-            <td>Large Vans</td>
-            <td>£2.50</td>
-            <td>£6.50</td>
-            <td>£6.50</td>
-          </tr>
-          <tr>
-            <td>Heavy Goods Vehicles</td>
-            <td>£5.00</td>
-            <td>£10.00</td>
-            <td>£10.00</td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="modalInstructionsContent">
+        <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
+        <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
+        <p><strong>No Charges:</strong> 22:00 - 06:00 and on Christmas Day</p>
+        <h3>Weekdays (Monday to Friday):</h3>
+        <p>
+          <strong>Northbound:</strong> 06:00 - 10:00 (Peak), all other times off-peak<br>
+          <strong>Southbound:</strong> 16:00 - 19:00 (Peak), all other times off-peak
+        </p>
+        <h3>Weekends (Saturday &amp; Sunday):</h3>
+        <p>Both directions: Off-peak only (06:00 - 22:00)</p>
+        <h3>Fee Rates (Auto Pay):</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle Type</th>
+              <th>Off-Peak</th>
+              <th>Peak</th>
+              <th>Phone/Online</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Motorcycles, Mopeds, Tricycles</td>
+              <td>£1.50</td>
+              <td>£2.50</td>
+              <td>£2.50</td>
+            </tr>
+            <tr>
+              <td>Cars and Small Vans</td>
+              <td>£1.50</td>
+              <td>£4.00</td>
+              <td>£4.00</td>
+            </tr>
+            <tr>
+              <td>Large Vans</td>
+              <td>£2.50</td>
+              <td>£6.50</td>
+              <td>£6.50</td>
+            </tr>
+            <tr>
+              <td>Heavy Goods Vehicles</td>
+              <td>£5.00</td>
+              <td>£10.00</td>
+              <td>£10.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   
@@ -477,26 +498,240 @@
   </div>
   
   <script>
-    // Global variable to store the previously focused element
+    /**********************
+     * TRANSLATIONS
+     **********************/
+    const translations = {
+      en: {
+        header: "Tunnel Fee Calculator",
+        countdown: "Charges come into effect in {days}d {hours}h {minutes}m {seconds}s",
+        countdownActive: "Charges are now in effect.",
+        dayLabel: "Day",
+        timeLabel: "Time",
+        timeHelper: "Format: HH:MM (e.g., 14:30)",
+        vehicleLabel: "Vehicle Type",
+        calculateButton: "Calculate Fee",
+        fillFieldsError: "Please fill in all fields.",
+        noCharge: "No charge applies.",
+        instructionsTitle: "Instructions & Fee Schedule",
+        instructionsText: "Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.",
+        chargingTimes: "Charging Times: 06:00 - 22:00 (charges apply per tunnel crossing)",
+        noCharges: "No Charges: 22:00 - 06:00 and on Christmas Day",
+        weekdays: "Weekdays (Monday to Friday):",
+        northbound: "Northbound: 06:00 - 10:00 (Peak), all other times off-peak",
+        southbound: "Southbound: 16:00 - 19:00 (Peak), all other times off-peak",
+        weekends: "Weekends (Saturday & Sunday):",
+        weekendsText: "Both directions: Off-peak only (06:00 - 22:00)",
+        feeRatesTitle: "Fee Rates (Auto Pay):",
+        tableVehicle: "Vehicle Type",
+        tableOffPeak: "Off-Peak",
+        tablePeak: "Peak",
+        tablePhone: "Phone/Online",
+        footer: "Olly Jeffers. All rights reserved.",
+        tunnelInfo: "<strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br><strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>Both tunnels connect the A102 between the south and north sides of the river. Charges come into effect from 7 April 2025."
+      },
+      fr: {
+        header: "Calculateur de péage du tunnel",
+        countdown: "Les frais entreront en vigueur dans {days}j {hours}h {minutes}m {seconds}s",
+        countdownActive: "Les frais sont désormais en vigueur.",
+        dayLabel: "Jour",
+        timeLabel: "Heure",
+        timeHelper: "Format: HH:MM (ex. 14:30)",
+        vehicleLabel: "Type de véhicule",
+        calculateButton: "Calculer le péage",
+        fillFieldsError: "Veuillez remplir tous les champs.",
+        noCharge: "Aucun frais applicable.",
+        instructionsTitle: "Instructions et grille tarifaire",
+        instructionsText: "Entrez le jour, l'heure et le type de véhicule pour calculer votre péage. Le tarif dépend si votre trajet a lieu pendant les heures de pointe ou hors pointe.",
+        chargingTimes: "Heures de facturation: 06:00 - 22:00 (frais par traversée du tunnel)",
+        noCharges: "Aucun frais: 22:00 - 06:00 et le jour de Noël",
+        weekdays: "Jours de semaine (lundi à vendredi):",
+        northbound: "Direction nord: 06:00 - 10:00 (Heures de pointe), autres horaires hors pointe",
+        southbound: "Direction sud: 16:00 - 19:00 (Heures de pointe), autres horaires hors pointe",
+        weekends: "Week-ends (samedi et dimanche):",
+        weekendsText: "Les deux directions: seulement hors pointe (06:00 - 22:00)",
+        feeRatesTitle: "Tarifs (paiement automatique):",
+        tableVehicle: "Type de véhicule",
+        tableOffPeak: "Hors Pointe",
+        tablePeak: "Heures de pointe",
+        tablePhone: "Téléphone/En ligne",
+        footer: "Olly Jeffers. Tous droits réservés.",
+        tunnelInfo: "<strong>Tunnel Blackwall</strong> relie l'A102 sur le côté ouest du Greenwich Peninsula à l'A12 à Poplar.<br><br><strong>Tunnel Silvertown</strong> relie le côté est du Greenwich Peninsula au Lower Lea Crossing A1026, A13 et d'autres destinations locales.<br><br>Les deux tunnels relient l'A102 entre le sud et le nord de la rivière. Les frais entrent en vigueur à partir du 7 avril 2025."
+      },
+      de: {
+        header: "Tunnelgebührenrechner",
+        countdown: "Die Gebühren treten in {days}T {hours}S {minutes}m {seconds}s in Kraft",
+        countdownActive: "Die Gebühren sind jetzt in Kraft.",
+        dayLabel: "Tag",
+        timeLabel: "Zeit",
+        timeHelper: "Format: HH:MM (z.B. 14:30)",
+        vehicleLabel: "Fahrzeugtyp",
+        calculateButton: "Gebühr berechnen",
+        fillFieldsError: "Bitte füllen Sie alle Felder aus.",
+        noCharge: "Keine Gebühr fällig.",
+        instructionsTitle: "Anleitung & Tarifübersicht",
+        instructionsText: "Geben Sie Tag, Zeit und Fahrzeugtyp ein, um Ihre Tunnelgebühr zu berechnen. Die Gebühr hängt davon ab, ob Ihre Fahrt während der Stoßzeiten oder außerhalb dieser stattfindet.",
+        chargingTimes: "Gebührenzeiten: 06:00 - 22:00 (Gebühren pro Tunnelüberquerung)",
+        noCharges: "Keine Gebühren: 22:00 - 06:00 und an Weihnachten",
+        weekdays: "Wochentage (Montag bis Freitag):",
+        northbound: "Nordwärts: 06:00 - 10:00 (Stoßzeit), alle anderen Zeiten außerhalb der Stoßzeit",
+        southbound: "Südwärts: 16:00 - 19:00 (Stoßzeit), alle anderen Zeiten außerhalb der Stoßzeit",
+        weekends: "Wochenenden (Samstag & Sonntag):",
+        weekendsText: "Beide Richtungen: Nur außerhalb der Stoßzeit (06:00 - 22:00)",
+        feeRatesTitle: "Tarife (Automatische Zahlung):",
+        tableVehicle: "Fahrzeugtyp",
+        tableOffPeak: "Außerhalb der Stoßzeit",
+        tablePeak: "Stoßzeit",
+        tablePhone: "Telefon/Online",
+        footer: "Olly Jeffers. Alle Rechte vorbehalten.",
+        tunnelInfo: "<strong>Blackwall Tunnel</strong> verbindet die A102 auf der Westseite der Greenwich Peninsula mit der A12 bei Poplar.<br><br><strong>Silvertown Tunnel</strong> verbindet die Ostseite der Greenwich Peninsula mit der A1026 Lower Lea Crossing, A13 und weiteren lokalen Zielen.<br><br>Beide Tunnel verbinden die A102 zwischen den Südstaaten und Nordseiten des Flusses. Die Gebühren gelten ab dem 7. April 2025."
+      },
+      es: {
+        header: "Calculadora de peajes de túnel",
+        countdown: "Los cargos entrarán en vigor en {days}d {hours}h {minutes}m {seconds}s",
+        countdownActive: "Los cargos ya están en vigor.",
+        dayLabel: "Día",
+        timeLabel: "Hora",
+        timeHelper: "Formato: HH:MM (ej. 14:30)",
+        vehicleLabel: "Tipo de vehículo",
+        calculateButton: "Calcular peaje",
+        fillFieldsError: "Por favor, complete todos los campos.",
+        noCharge: "No se aplica cargo.",
+        instructionsTitle: "Instrucciones y tabla de tarifas",
+        instructionsText: "Ingrese el día, la hora y el tipo de vehículo para calcular su peaje. La tarifa depende de si su viaje ocurre en horas pico o fuera de ellas.",
+        chargingTimes: "Horas de cobro: 06:00 - 22:00 (se cobran por cruce de túnel)",
+        noCharges: "Sin cargos: 22:00 - 06:00 y en Navidad",
+        weekdays: "Días laborables (de lunes a viernes):",
+        northbound: "Hacia el norte: 06:00 - 10:00 (Horas pico), el resto fuera de pico",
+        southbound: "Hacia el sur: 16:00 - 19:00 (Horas pico), el resto fuera de pico",
+        weekends: "Fines de semana (sábado y domingo):",
+        weekendsText: "Ambas direcciones: Solo fuera de pico (06:00 - 22:00)",
+        feeRatesTitle: "Tarifas (Pago automático):",
+        tableVehicle: "Tipo de vehículo",
+        tableOffPeak: "Fuera de pico",
+        tablePeak: "Horas pico",
+        tablePhone: "Teléfono/En línea",
+        footer: "Olly Jeffers. Todos los derechos reservados.",
+        tunnelInfo: "<strong>Túnel Blackwall</strong> conecta la A102 en el lado oeste del Greenwich Peninsula con la A12 en Poplar.<br><br><strong>Túnel Silvertown</strong> conecta el lado este del Greenwich Peninsula con la A1026 Lower Lea Crossing, A13 y otros destinos locales.<br><br>Ambos túneles conectan la A102 entre los lados sur y norte del río. Los cargos entran en vigor el 7 de abril de 2025."
+      },
+      zh: {
+        header: "隧道收费计算器",
+        countdown: "距离收费生效还有 {days}天 {hours}小时 {minutes}分 {seconds}秒",
+        countdownActive: "收费已生效。",
+        dayLabel: "日期",
+        timeLabel: "时间",
+        timeHelper: "格式：HH:MM（例如 14:30）",
+        vehicleLabel: "车辆类型",
+        calculateButton: "计算收费",
+        fillFieldsError: "请填写所有字段。",
+        noCharge: "不收费。",
+        instructionsTitle: "使用说明及收费标准",
+        instructionsText: "请输入日期、时间和车辆类型以计算隧道收费。收费取决于您的行程是否在高峰时段。",
+        chargingTimes: "收费时间：06:00 - 22:00（按每次通行收费）",
+        noCharges: "免费时段：22:00 - 06:00 及圣诞节",
+        weekdays: "工作日（周一至周五）：",
+        northbound: "北行：06:00 - 10:00（高峰），其他时间非高峰",
+        southbound: "南行：16:00 - 19:00（高峰），其他时间非高峰",
+        weekends: "周末（周六和周日）：",
+        weekendsText: "双向：仅非高峰（06:00 - 22:00）",
+        feeRatesTitle: "收费标准（自动支付）：",
+        tableVehicle: "车辆类型",
+        tableOffPeak: "非高峰",
+        tablePeak: "高峰",
+        tablePhone: "电话/在线",
+        footer: "Olly Jeffers. 版权所有。",
+        tunnelInfo: "<strong>Blackwall隧道</strong>连接Greenwich Peninsula西侧的A102与Poplar的A12。<br><br><strong>Silvertown隧道</strong>连接Greenwich Peninsula东侧与A1026 Lower Lea Crossing、A13及其他本地目的地。<br><br>两条隧道连接A102，将河流两侧相连。收费自2025年4月7日起生效。"
+      }
+    };
+    
+    /**********************
+     * LANGUAGE SWITCHER
+     **********************/
+    function setLanguage(lang) {
+      const texts = translations[lang];
+  
+      // Update header text
+      document.getElementById("pageHeader").textContent = texts.header;
+      
+      // Update form labels and helper text
+      document.getElementById("dayLabel").textContent = texts.dayLabel;
+      document.getElementById("timeLabel").textContent = texts.timeLabel;
+      document.getElementById("vehicleLabel").textContent = texts.vehicleLabel;
+      document.getElementById("timeHelper").textContent = texts.timeHelper;
+      
+      // Update button text
+      document.getElementById("calculateButton").textContent = texts.calculateButton;
+      
+      // Update instructions modal texts
+      document.getElementById("modalInstructionsTitle").textContent = texts.instructionsTitle;
+      document.getElementById("modalInstructionsContent").innerHTML = `
+        <p>${texts.instructionsText}</p>
+        <p><strong>${texts.chargingTimes}</strong></p>
+        <p><strong>${texts.noCharges}</strong></p>
+        <h3>${texts.weekdays}</h3>
+        <p>
+          <strong>${texts.northbound}</strong><br>
+          <strong>${texts.southbound}</strong>
+        </p>
+        <h3>${texts.weekends}</h3>
+        <p>${texts.weekendsText}</p>
+        <h3>${texts.feeRatesTitle}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>${texts.tableVehicle}</th>
+              <th>${texts.tableOffPeak}</th>
+              <th>${texts.tablePeak}</th>
+              <th>${texts.tablePhone}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${texts.tableVehicle}</td>
+              <td>${texts.tableOffPeak}</td>
+              <td>${texts.tablePeak}</td>
+              <td>${texts.tablePhone}</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      // Reattach the event listener for closing instructions modal
+      document.getElementById("closeModalInstructions").addEventListener("click", function() {
+        closeModal("modalInstructions");
+      });
+      
+      // Update image container tunnel info text
+      document.getElementById("tunnelInfo").innerHTML = texts.tunnelInfo;
+      
+      // Update footer
+      document.getElementById("pageFooter").innerHTML = `&copy; ${new Date().getFullYear()} ${texts.footer}`;
+    }
+    
+    // Initially set language to English
+    setLanguage("en");
+    
+    /**********************
+     * ACCESSIBILITY & MODALS
+     **********************/
     let previousActiveElement = null;
-
-    // Function to trap focus within a modal
+    
+    // Simple focus trap for a modal element
     function trapFocus(modal) {
       const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]';
       const focusableElements = modal.querySelectorAll(focusableSelectors);
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
-
+  
       modal.addEventListener('keydown', function(e) {
         if (e.key === 'Tab') {
           if (e.shiftKey) {
-            // If Shift + Tab pressed
+            // If Shift + Tab is pressed
             if (document.activeElement === firstElement) {
               e.preventDefault();
               lastElement.focus();
             }
           } else {
-            // Tab pressed
+            // If Tab is pressed
             if (document.activeElement === lastElement) {
               e.preventDefault();
               firstElement.focus();
@@ -505,8 +740,8 @@
         }
       });
     }
-
-    // Function to open a modal by type ("instructions" or "image")
+    
+    // Open a modal ("instructions" or "image")
     function openModal(type) {
       previousActiveElement = document.activeElement;
       if (type === "instructions") {
@@ -521,8 +756,8 @@
         modal.focus();
       }
     }
-
-    // Function to close a modal by ID and return focus
+    
+    // Close a modal and return focus
     function closeModal(modalId) {
       const modal = document.getElementById(modalId);
       modal.style.display = "none";
@@ -530,8 +765,10 @@
         previousActiveElement.focus();
       }
     }
-
-    // Countdown Timer: Target Date is 7 April 2025
+    
+    /**********************
+     * COUNTDOWN TIMER
+     **********************/
     const targetDate = new Date("2025-04-07T00:00:00");
     const countdownElem = document.getElementById("countdown");
     
@@ -540,7 +777,7 @@
       const diff = targetDate - now;
       
       if (diff <= 0) {
-        countdownElem.textContent = "Charges are now in effect.";
+        countdownElem.textContent = translations.en.countdownActive; // or you could update it per selected language
         clearInterval(countdownInterval);
         return;
       }
@@ -550,49 +787,51 @@
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
       
-      countdownElem.textContent = `Charges come into effect in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      // Replace tokens in the countdown text
+      let countText = translations.en.countdown;
+      // If needed, you can update the countdown string in the currently selected language.
+      countText = countText.replace("{days}", days)
+                           .replace("{hours}", hours)
+                           .replace("{minutes}", minutes)
+                           .replace("{seconds}", seconds);
+      countdownElem.textContent = countText;
     }
     
     const countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown(); // initial call
+    updateCountdown();
     
-    // Calculation Function
+    /**********************
+     * FEE CALCULATION
+     **********************/
     function calculateFee() {
       const day = document.getElementById("day").value;
       const timeInput = document.getElementById("time").value;
       const vehicle = document.getElementById("vehicle").value;
       const resultDiv = document.getElementById("result");
       
-      // Validate inputs; if any field is missing, show an error message.
       if (!day || !timeInput || !vehicle) {
         resultDiv.style.display = "block";
-        resultDiv.textContent = "Please fill in all fields.";
+        resultDiv.textContent = translations.en.fillFieldsError; // Alternatively, use current language
         return;
       }
       
-      // Convert the time input (HH:MM) into total minutes from midnight.
       const [hourStr, minuteStr] = timeInput.split(":");
       const hours = parseInt(hourStr, 10);
       const minutes = parseInt(minuteStr, 10);
       const totalMinutes = hours * 60 + minutes;
       
-      // Determine if no charge applies: on Christmas Day or outside 06:00 - 22:00.
       if (day === "Christmas Day" || totalMinutes < 360 || totalMinutes >= 1320) {
         resultDiv.style.display = "block";
-        resultDiv.textContent = "No charge applies.";
+        resultDiv.textContent = translations.en.noCharge;
         return;
       }
       
       const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
       const isWeekday = weekdays.includes(day);
       
-      // Define peak periods on weekdays:
-      // Morning Peak: 06:00 - 10:00 (360 to 600 minutes)
-      // Evening Peak: 16:00 - 19:00 (960 to 1140 minutes)
       const inMorningPeak = isWeekday && (totalMinutes >= 360 && totalMinutes < 600);
       const inEveningPeak = isWeekday && (totalMinutes >= 960 && totalMinutes < 1140);
       
-      // Fee schedules (Auto Pay rates)
       const feesOffPeak = {
         motorcycle: 1.50,
         car: 1.50,
@@ -610,19 +849,16 @@
       let resultHTML = "";
       
       if (inMorningPeak) {
-        // Morning peak: Northbound is peak; Southbound is off-peak.
         const feeNorth = feesPeak[vehicle];
         const feeSouth = feesOffPeak[vehicle];
         resultHTML = "<strong>Northbound (Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
                      "<strong>Southbound (Off-Peak):</strong> £" + feeSouth.toFixed(2);
       } else if (inEveningPeak) {
-        // Evening peak: Southbound is peak; Northbound is off-peak.
         const feeSouth = feesPeak[vehicle];
         const feeNorth = feesOffPeak[vehicle];
         resultHTML = "<strong>Northbound (Off-Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
                      "<strong>Southbound (Peak):</strong> £" + feeSouth.toFixed(2);
       } else {
-        // Otherwise, off-peak applies for both directions.
         const fee = feesOffPeak[vehicle];
         resultHTML = "<strong>Charge (Off-Peak):</strong> £" + fee.toFixed(2);
       }
@@ -631,7 +867,17 @@
       resultDiv.innerHTML = resultHTML;
     }
     
-    // Close modal when clicking outside the modal content for both modals
+    /**********************
+     * MODAL EVENT LISTENERS
+     **********************/
+    document.getElementById("closeModalInstructions").addEventListener("click", function() {
+      closeModal("modalInstructions");
+    });
+    
+    document.getElementById("closeModalImage").addEventListener("click", function() {
+      closeModal("modalImage");
+    });
+    
     window.addEventListener("click", function(event) {
       const modalInstructions = document.getElementById("modalInstructions");
       const modalImage = document.getElementById("modalImage");
@@ -643,7 +889,6 @@
       }
     });
     
-    // Close modals on Escape key press.
     window.addEventListener("keydown", function(event) {
       if (event.key === "Escape") {
         closeModal("modalInstructions");
