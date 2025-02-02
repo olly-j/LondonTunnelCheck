@@ -14,7 +14,6 @@
       margin: 0;
       padding: 0;
     }
-    
     /* Animated multi-color gradient background */
     body {
       font-family: 'Inter', sans-serif;
@@ -28,7 +27,6 @@
       background: #000;
       overflow: hidden;
     }
-    
     body::before {
       content: "";
       position: absolute;
@@ -42,26 +40,22 @@
       filter: blur(50px);
       z-index: -1;
     }
-    
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    
     /* Semantic Landmarks */
     header, main, footer {
       width: 100%;
       max-width: 1000px;
     }
-    
     header {
-      text-align: center;
-      margin-bottom: 20px;
       position: relative;
+      margin-bottom: 20px;
+      text-align: center;
     }
-    
-    /* Language Selector using flags */
+    /* Flag-based Language Selector (top-right of header) */
     #languageSelector {
       position: absolute;
       top: 10px;
@@ -69,55 +63,53 @@
       display: flex;
       gap: 5px;
     }
-    
     .flag-btn {
       background: transparent;
       border: none;
       font-size: 1.5rem;
       cursor: pointer;
     }
-    
     .flag-btn:focus {
       outline: 2px solid #007aff;
     }
-    
+    h1 {
+      margin-bottom: 1rem;
+      color: #333;
+      font-size: 2rem;
+      font-weight: 700;
+    }
     main {
       display: flex;
       flex-direction: column;
       gap: 20px;
       width: 100%;
     }
-    
-    /* Wrapper for the two-column layout */
     .content-wrapper {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-    
-    /* Left: Form Container */
+    /* Form Container (Left Column) */
     .form-container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
       padding: 2rem;
-      flex: 1;
       position: relative;
       text-align: center;
       border: 1px solid #e0e0e0;
+      flex: 1;
     }
-    
-    /* Right: Image Container */
+    /* Image Container (Right Column) */
     .image-container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
       padding: 2rem;
-      flex: 1;
-      border: 1px solid #e0e0e0;
       text-align: center;
+      border: 1px solid #e0e0e0;
+      flex: 1;
     }
-    
     .image-container img {
       max-width: 100%;
       height: auto;
@@ -125,11 +117,9 @@
       cursor: pointer;
       outline: none;
     }
-    
     .image-container img:focus {
       border: 2px solid #007aff;
     }
-    
     .image-container p {
       margin-top: 1rem;
       font-size: 0.95rem;
@@ -137,8 +127,7 @@
       text-align: left;
       line-height: 1.4;
     }
-    
-    /* Small info (question mark) button in top-right of form container */
+    /* Info Button (Question Mark) */
     .info-btn {
       position: absolute;
       top: 16px;
@@ -156,32 +145,21 @@
       font-size: 18px;
       transition: background 0.3s;
     }
-    
     .info-btn:hover {
       background: #005bb5;
     }
-    
-    h1 {
-      margin-bottom: 1rem;
-      color: #333;
-      font-size: 2rem;
-      font-weight: 700;
-    }
-    
-    /* Countdown styling with ARIA live region */
+    /* Countdown Timer */
     .countdown {
       font-size: 1.1rem;
       font-weight: 600;
       color: #d9534f;
       margin-bottom: 1rem;
     }
-    
-    /* Form items as a vertical list */
+    /* Form Items */
     .form-group {
       margin-bottom: 1rem;
       text-align: left;
     }
-    
     label {
       display: block;
       font-size: 0.95rem;
@@ -189,30 +167,26 @@
       font-weight: 600;
       margin-bottom: 0.3rem;
     }
-    
     input, select {
       width: 100%;
       padding: 0.75rem;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
+      background-color: #fafafa;
       outline: none;
       transition: border-color 0.3s, box-shadow 0.3s;
-      background-color: #fafafa;
     }
-    
     input:focus, select:focus {
       border-color: #007aff;
       box-shadow: 0 0 8px rgba(0, 122, 255, 0.5);
     }
-    
     .helper-text {
       font-size: 0.8rem;
       color: #888;
       margin-top: 0.3rem;
     }
-    
-    /* Primary button styling */
+    /* Primary Button */
     .primary-btn {
       margin-top: 1.5rem;
       width: 100%;
@@ -226,13 +200,11 @@
       cursor: pointer;
       transition: transform 0.2s ease, background 0.3s ease;
     }
-    
     .primary-btn:hover {
       background: linear-gradient(90deg, #005bb5, #009ecb);
       transform: scale(1.02);
     }
-    
-    /* Result box styling (hidden until a result is available) with ARIA live region */
+    /* Result Box */
     .result {
       margin-top: 1.5rem;
       padding: 1rem;
@@ -245,8 +217,7 @@
       border: 1px solid #ddd;
       display: none;
     }
-    
-    /* Modal styling (for both instructions and image popup) */
+    /* Modal Styling */
     .modal {
       display: none;
       position: fixed;
@@ -260,7 +231,6 @@
       justify-content: center;
       align-items: center;
     }
-    
     .modal-content {
       background-color: #fff;
       border-radius: 12px;
@@ -273,49 +243,41 @@
       overflow-y: auto;
       text-align: left;
     }
-    
     .modal-content img {
       width: 100%;
       height: auto;
       display: block;
       border-radius: 8px;
     }
-    
     .modal-content h2,
     .modal-content h3 {
       margin-top: 10px;
       margin-bottom: 10px;
       color: #333;
     }
-    
     .modal-content p {
       margin-bottom: 10px;
       line-height: 1.5;
       color: #555;
     }
-    
     .modal-content table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
-    
     .modal-content table, 
     .modal-content th, 
     .modal-content td {
       border: 1px solid #ddd;
     }
-    
     .modal-content th, 
     .modal-content td {
       padding: 8px;
       text-align: left;
     }
-    
     .modal-content th {
       background-color: #f2f2f2;
     }
-    
     .close {
       position: absolute;
       top: 10px;
@@ -325,13 +287,11 @@
       font-weight: bold;
       cursor: pointer;
     }
-    
     .close:hover,
     .close:focus {
       color: #000;
     }
-    
-    /* Responsive adjustments: side-by-side layout on wider screens */
+    /* Responsive adjustments: Two-column layout on wider screens */
     @media (min-width: 800px) {
       .content-wrapper {
         flex-direction: row;
@@ -344,7 +304,6 @@
         margin-left: 20px;
       }
     }
-    
     @media (max-width: 480px) {
       h1 {
         font-size: 1.6rem;
@@ -353,8 +312,7 @@
         font-size: 0.95rem;
       }
     }
-    
-    /* Footer styling */
+    /* Footer Styling */
     footer {
       margin-top: 20px;
       text-align: center;
@@ -365,7 +323,7 @@
 </head>
 <body>
   <header>
-    <!-- Flag-based Language Selector in Top-Right -->
+    <!-- Flag-based Language Selector (Top-Right) -->
     <div id="languageSelector">
       <button class="flag-btn" onclick="setLanguage('en')" aria-label="English">🇬🇧</button>
       <button class="flag-btn" onclick="setLanguage('fr')" aria-label="Français">🇫🇷</button>
@@ -380,9 +338,9 @@
     <div class="content-wrapper">
       <!-- Left: Form Container -->
       <div class="form-container">
-        <!-- Info button (question mark icon) -->
-        <button class="info-btn" aria-label="Instructions &amp; Fee Schedule" onclick="openModal('instructions')">?</button>
-        <!-- Countdown Timer with ARIA live region -->
+        <!-- Info button (question mark) -->
+        <button class="info-btn" aria-label="Instructions & Fee Schedule" onclick="openModal('instructions')">?</button>
+        <!-- Countdown Timer (with ARIA live region) -->
         <div id="countdown" class="countdown" aria-live="polite"></div>
         <form id="feeForm">
           <div class="form-group">
@@ -416,7 +374,7 @@
           </div>
           <button type="button" class="primary-btn" id="calculateButton" onclick="calculateFee()">Calculate Fee</button>
         </form>
-        <!-- Hidden result box with ARIA live region -->
+        <!-- Result Box (hidden until a calculation is performed) -->
         <div class="result" id="result" aria-live="polite"></div>
       </div>
       
@@ -444,17 +402,17 @@
   <div id="modalInstructions" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalInstructionsTitle" tabindex="-1">
     <div class="modal-content">
       <span id="closeModalInstructions" class="close" aria-label="Close">&times;</span>
-      <h2 id="modalInstructionsTitle">Instructions &amp; Fee Schedule</h2>
+      <h2 id="modalInstructionsTitle">Instructions & Fee Schedule</h2>
       <div id="modalInstructionsContent">
         <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
-        <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
-        <p><strong>No Charges:</strong> 22:00 - 06:00 and on Christmas Day</p>
+        <p><strong>Charging Times: 06:00 - 22:00</strong> (charges apply per tunnel crossing)</p>
+        <p><strong>No Charges: 22:00 - 06:00 and on Christmas Day</strong></p>
         <h3>Weekdays (Monday to Friday):</h3>
         <p>
-          <strong>Northbound:</strong> 06:00 - 10:00 (Peak), all other times off-peak<br>
-          <strong>Southbound:</strong> 16:00 - 19:00 (Peak), all other times off-peak
+          <strong>Northbound: 06:00 - 10:00 (Peak)</strong><br>
+          <strong>Southbound: 16:00 - 19:00 (Peak)</strong>
         </p>
-        <h3>Weekends (Saturday &amp; Sunday):</h3>
+        <h3>Weekends (Saturday & Sunday):</h3>
         <p>Both directions: Off-peak only (06:00 - 22:00)</p>
         <h3>Fee Rates (Auto Pay):</h3>
         <table>
@@ -526,8 +484,8 @@
         chargingTimes: "Charging Times: 06:00 - 22:00 (charges apply per tunnel crossing)",
         noCharges: "No Charges: 22:00 - 06:00 and on Christmas Day",
         weekdays: "Weekdays (Monday to Friday):",
-        northbound: "Northbound: 06:00 - 10:00 (Peak), all other times off-peak",
-        southbound: "Southbound: 16:00 - 19:00 (Peak), all other times off-peak",
+        northbound: "Northbound: 06:00 - 10:00 (Peak)",
+        southbound: "Southbound: 16:00 - 19:00 (Peak)",
         weekends: "Weekends (Saturday & Sunday):",
         weekendsText: "Both directions: Off-peak only (06:00 - 22:00)",
         feeRatesTitle: "Fee Rates (Auto Pay):",
@@ -554,8 +512,8 @@
         chargingTimes: "Heures de facturation: 06:00 - 22:00 (frais par traversée du tunnel)",
         noCharges: "Aucun frais: 22:00 - 06:00 et le jour de Noël",
         weekdays: "Jours de semaine (lundi à vendredi):",
-        northbound: "Direction nord: 06:00 - 10:00 (Heures de pointe), autres horaires hors pointe",
-        southbound: "Direction sud: 16:00 - 19:00 (Heures de pointe), autres horaires hors pointe",
+        northbound: "Direction nord: 06:00 - 10:00 (Heures de pointe)",
+        southbound: "Direction sud: 16:00 - 19:00 (Heures de pointe)",
         weekends: "Week-ends (samedi et dimanche):",
         weekendsText: "Les deux directions: seulement hors pointe (06:00 - 22:00)",
         feeRatesTitle: "Tarifs (paiement automatique):",
@@ -582,8 +540,8 @@
         chargingTimes: "Gebührenzeiten: 06:00 - 22:00 (Gebühren pro Tunnelüberquerung)",
         noCharges: "Keine Gebühren: 22:00 - 06:00 und an Weihnachten",
         weekdays: "Wochentage (Montag bis Freitag):",
-        northbound: "Nordwärts: 06:00 - 10:00 (Stoßzeit), alle anderen Zeiten außerhalb der Stoßzeit",
-        southbound: "Südwärts: 16:00 - 19:00 (Stoßzeit), alle anderen Zeiten außerhalb der Stoßzeit",
+        northbound: "Nordwärts: 06:00 - 10:00 (Stoßzeit)",
+        southbound: "Südwärts: 16:00 - 19:00 (Stoßzeit)",
         weekends: "Wochenenden (Samstag & Sonntag):",
         weekendsText: "Beide Richtungen: Nur außerhalb der Stoßzeit (06:00 - 22:00)",
         feeRatesTitle: "Tarife (Automatische Zahlung):",
@@ -610,8 +568,8 @@
         chargingTimes: "Horas de cobro: 06:00 - 22:00 (se cobran por cruce de túnel)",
         noCharges: "Sin cargos: 22:00 - 06:00 y en Navidad",
         weekdays: "Días laborables (de lunes a viernes):",
-        northbound: "Hacia el norte: 06:00 - 10:00 (Horas pico), el resto fuera de pico",
-        southbound: "Hacia el sur: 16:00 - 19:00 (Horas pico), el resto fuera de pico",
+        northbound: "Hacia el norte: 06:00 - 10:00 (Horas pico)",
+        southbound: "Hacia el sur: 16:00 - 19:00 (Horas pico)",
         weekends: "Fines de semana (sábado y domingo):",
         weekendsText: "Ambas direcciones: Solo fuera de pico (06:00 - 22:00)",
         feeRatesTitle: "Tarifas (Pago automático):",
@@ -638,8 +596,8 @@
         chargingTimes: "收费时间：06:00 - 22:00（按每次通行收费）",
         noCharges: "免费时段：22:00 - 06:00 及圣诞节",
         weekdays: "工作日（周一至周五）：",
-        northbound: "北行：06:00 - 10:00（高峰），其他时间非高峰",
-        southbound: "南行：16:00 - 19:00（高峰），其他时间非高峰",
+        northbound: "北行：06:00 - 10:00（高峰）",
+        southbound: "南行：16:00 - 19:00（高峰）",
         weekends: "周末（周六和周日）：",
         weekendsText: "双向：仅非高峰（06:00 - 22:00）",
         feeRatesTitle: "收费标准（自动支付）：",
@@ -657,19 +615,15 @@
      **********************/
     function setLanguage(lang) {
       const texts = translations[lang];
-  
       // Update header text
       document.getElementById("pageHeader").textContent = texts.header;
-      
       // Update form labels and helper text
       document.getElementById("dayLabel").textContent = texts.dayLabel;
       document.getElementById("timeLabel").textContent = texts.timeLabel;
       document.getElementById("vehicleLabel").textContent = texts.vehicleLabel;
       document.getElementById("timeHelper").textContent = texts.timeHelper;
-      
       // Update button text
       document.getElementById("calculateButton").textContent = texts.calculateButton;
-      
       // Update instructions modal texts
       document.getElementById("modalInstructionsTitle").textContent = texts.instructionsTitle;
       document.getElementById("modalInstructionsContent").innerHTML = `
@@ -723,14 +677,11 @@
       `;
       // Update image container tunnel info text
       document.getElementById("tunnelInfo").innerHTML = texts.tunnelInfo;
-      
-      // Update footer text (if desired, otherwise static already)
+      // Update footer text
       document.getElementById("pageFooter").innerHTML = `&copy; ${new Date().getFullYear()} ${texts.footer}`;
-      
-      // (Optional) Update the countdown text if needed
-      updateCountdown(); // re-run countdown update to use current language
+      // Update countdown text to current language (if applicable)
+      updateCountdown();
     }
-    
     // Initially set language to English
     setLanguage("en");
     
@@ -738,14 +689,12 @@
      * ACCESSIBILITY & MODALS
      **********************/
     let previousActiveElement = null;
-    
-    // Simple focus trap for a modal element
     function trapFocus(modal) {
       const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]';
       const focusableElements = modal.querySelectorAll(focusableSelectors);
+      if (!focusableElements.length) return;
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
-  
       modal.addEventListener('keydown', function(e) {
         if (e.key === 'Tab') {
           if (e.shiftKey) {
@@ -762,8 +711,6 @@
         }
       });
     }
-    
-    // Open a modal ("instructions" or "image")
     function openModal(type) {
       previousActiveElement = document.activeElement;
       if (type === "instructions") {
@@ -778,8 +725,6 @@
         modal.focus();
       }
     }
-    
-    // Close a modal and return focus
     function closeModal(modalId) {
       const modal = document.getElementById(modalId);
       modal.style.display = "none";
@@ -793,22 +738,18 @@
      **********************/
     const targetDate = new Date("2025-04-07T00:00:00");
     const countdownElem = document.getElementById("countdown");
-    
     function updateCountdown() {
       const now = new Date();
       const diff = targetDate - now;
-      
       if (diff <= 0) {
         countdownElem.textContent = translations.en.countdownActive;
         clearInterval(countdownInterval);
         return;
       }
-      
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
-      
       let countText = translations.en.countdown;
       countText = countText.replace("{days}", days)
                            .replace("{hours}", hours)
@@ -816,7 +757,6 @@
                            .replace("{seconds}", seconds);
       countdownElem.textContent = countText;
     }
-    
     const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
     
@@ -828,46 +768,27 @@
       const timeInput = document.getElementById("time").value;
       const vehicle = document.getElementById("vehicle").value;
       const resultDiv = document.getElementById("result");
-      
       if (!day || !timeInput || !vehicle) {
         resultDiv.style.display = "block";
         resultDiv.textContent = translations.en.fillFieldsError;
         return;
       }
-      
       const [hourStr, minuteStr] = timeInput.split(":");
       const hours = parseInt(hourStr, 10);
       const minutes = parseInt(minuteStr, 10);
       const totalMinutes = hours * 60 + minutes;
-      
       if (day === "Christmas Day" || totalMinutes < 360 || totalMinutes >= 1320) {
         resultDiv.style.display = "block";
         resultDiv.textContent = translations.en.noCharge;
         return;
       }
-      
       const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
       const isWeekday = weekdays.includes(day);
-      
       const inMorningPeak = isWeekday && (totalMinutes >= 360 && totalMinutes < 600);
       const inEveningPeak = isWeekday && (totalMinutes >= 960 && totalMinutes < 1140);
-      
-      const feesOffPeak = {
-        motorcycle: 1.50,
-        car: 1.50,
-        largeVan: 2.50,
-        heavy: 5.00
-      };
-      
-      const feesPeak = {
-        motorcycle: 2.50,
-        car: 4.00,
-        largeVan: 6.50,
-        heavy: 10.00
-      };
-      
+      const feesOffPeak = { motorcycle: 1.50, car: 1.50, largeVan: 2.50, heavy: 5.00 };
+      const feesPeak = { motorcycle: 2.50, car: 4.00, largeVan: 6.50, heavy: 10.00 };
       let resultHTML = "";
-      
       if (inMorningPeak) {
         const feeNorth = feesPeak[vehicle];
         const feeSouth = feesOffPeak[vehicle];
@@ -882,7 +803,6 @@
         const fee = feesOffPeak[vehicle];
         resultHTML = "<strong>Charge (Off-Peak):</strong> £" + fee.toFixed(2);
       }
-      
       resultDiv.style.display = "block";
       resultDiv.innerHTML = resultHTML;
     }
@@ -893,11 +813,9 @@
     document.getElementById("closeModalInstructions").addEventListener("click", function() {
       closeModal("modalInstructions");
     });
-    
     document.getElementById("closeModalImage").addEventListener("click", function() {
       closeModal("modalImage");
     });
-    
     window.addEventListener("click", function(event) {
       const modalInstructions = document.getElementById("modalInstructions");
       const modalImage = document.getElementById("modalImage");
@@ -908,7 +826,6 @@
         closeModal("modalImage");
       }
     });
-    
     window.addEventListener("keydown", function(event) {
       if (event.key === "Escape") {
         closeModal("modalInstructions");
