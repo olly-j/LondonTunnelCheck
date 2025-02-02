@@ -21,6 +21,7 @@
       position: relative;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: 20px;
@@ -302,6 +303,14 @@
         font-size: 0.95rem;
       }
     }
+    
+    /* Footer styling */
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
   </style>
 </head>
 <body>
@@ -359,6 +368,11 @@
       </p>
     </div>
   </div>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; <script>document.write(new Date().getFullYear());</script> Olly Jeffers. All rights reserved.
+  </footer>
   
   <!-- Modal Structure for Instructions & Fee Schedule -->
   <div id="modal" class="modal" role="dialog" aria-labelledby="modalTitle" tabindex="-1">
