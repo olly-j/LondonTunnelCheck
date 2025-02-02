@@ -26,7 +26,6 @@ The Tunnel Fee Calculator is a modern, responsive web application that calculate
 
 You can view the live demo on GitHub Pages:  
 [Live Demo](https://olly-j.github.io/LondonTunnelCheck/)  
-*(Replace with your actual GitHub Pages URL)*
 
 ## Getting Started
 
