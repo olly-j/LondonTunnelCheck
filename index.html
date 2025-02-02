@@ -8,14 +8,14 @@
   <!-- Import Google Fonts: Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Global reset */
+    /* Global Reset */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
-    /* Animated multi-colour gradient background */
+    
+    /* Animated multi-color gradient background */
     body {
       font-family: 'Inter', sans-serif;
       position: relative;
@@ -27,7 +27,7 @@
       background: #000;
       overflow: hidden;
     }
-
+    
     body::before {
       content: "";
       position: absolute;
@@ -41,45 +41,80 @@
       filter: blur(50px);
       z-index: -1;
     }
-
+    
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    /* Container styling */
+    
+    /* Main container styling */
     .container {
-      background: rgba(255,255,255,0.95);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
       padding: 2rem;
       max-width: 500px;
       width: 100%;
+      position: relative;
       text-align: center;
       border: 1px solid #e0e0e0;
     }
-
+    
+    /* Small info (question mark) button in top-right */
+    .info-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+    
+    .info-btn:hover {
+      background: #005bb5;
+    }
+    
     h1 {
       margin-bottom: 1.5rem;
       color: #333;
       font-size: 2rem;
       font-weight: 700;
     }
-
+    
+    /* Form row: Day and Time side by side */
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .form-group {
+      flex: 1;
+      min-width: 150px;
+      text-align: left;
+    }
+    
     label {
       display: block;
-      margin-top: 1rem;
       font-size: 0.95rem;
       color: #555;
-      text-align: left;
       font-weight: 600;
+      margin-bottom: 0.3rem;
     }
-
+    
     input, select {
       width: 100%;
       padding: 0.75rem;
-      margin-top: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
@@ -87,21 +122,20 @@
       transition: border-color 0.3s, box-shadow 0.3s;
       background-color: #fafafa;
     }
-
+    
     input:focus, select:focus {
       border-color: #007aff;
       box-shadow: 0 0 8px rgba(0, 122, 255, 0.5);
     }
-
+    
     .helper-text {
       font-size: 0.8rem;
       color: #888;
       margin-top: 0.3rem;
-      text-align: left;
     }
-
+    
     /* Primary button styling */
-    button {
+    .primary-btn {
       margin-top: 1.5rem;
       width: 100%;
       padding: 0.75rem;
@@ -113,16 +147,14 @@
       font-weight: 600;
       cursor: pointer;
       transition: transform 0.2s ease, background 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
-
-    button:hover {
+    
+    .primary-btn:hover {
       background: linear-gradient(90deg, #005bb5, #009ecb);
       transform: scale(1.02);
     }
-
+    
+    /* Result box styling (hidden until a result is available) */
     .result {
       margin-top: 1.5rem;
       padding: 1rem;
@@ -133,28 +165,12 @@
       text-align: left;
       line-height: 1.5;
       border: 1px solid #ddd;
+      display: none;
     }
-
-    /* More Info button styling */
-    .more-info-btn {
-      background: #28a745;
-      margin-top: 1rem;
-    }
-
-    .more-info-btn:hover {
-      background: #218838;
-    }
-
-    /* Icon styling for buttons */
-    .btn-icon {
-      margin-right: 8px;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
+    
     /* Modal styling */
     .modal {
-      display: none; /* Hidden by default */
+      display: none;
       position: fixed;
       z-index: 10;
       left: 0;
@@ -166,55 +182,55 @@
       justify-content: center;
       align-items: center;
     }
-
+    
     .modal-content {
       background-color: #fff;
       border-radius: 12px;
       padding: 20px;
       max-width: 600px;
       width: 90%;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       position: relative;
       max-height: 90vh;
       overflow-y: auto;
       text-align: left;
     }
-
+    
     .modal-content h2,
     .modal-content h3 {
       margin-top: 10px;
       margin-bottom: 10px;
       color: #333;
     }
-
+    
     .modal-content p {
       margin-bottom: 10px;
       line-height: 1.5;
       color: #555;
     }
-
+    
     .modal-content table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
-
+    
     .modal-content table, 
     .modal-content th, 
     .modal-content td {
       border: 1px solid #ddd;
     }
-
+    
     .modal-content th, 
     .modal-content td {
       padding: 8px;
       text-align: left;
     }
-
+    
     .modal-content th {
       background-color: #f2f2f2;
     }
-
+    
     .close {
       position: absolute;
       top: 10px;
@@ -224,72 +240,77 @@
       font-weight: bold;
       cursor: pointer;
     }
-
+    
     .close:hover,
     .close:focus {
       color: #000;
     }
-
+    
     /* Responsive adjustments */
     @media (max-width: 480px) {
       h1 {
         font-size: 1.6rem;
       }
-      label, input, select, button {
+      label, input, select, .primary-btn {
         font-size: 0.95rem;
+      }
+      .form-row {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Info button (question mark icon) -->
+    <button class="info-btn" aria-label="Instructions & Fee Schedule" onclick="openModal()">?</button>
     <h1>Tunnel Fee Calculator</h1>
     <form id="feeForm">
-      <label for="day">Day:</label>
-      <select id="day" required>
-        <option value="">--Select Day--</option>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-        <option value="Saturday">Saturday</option>
-        <option value="Sunday">Sunday</option>
-        <option value="Christmas Day">Christmas Day</option>
-      </select>
-
-      <label for="time">Time:</label>
-      <input type="time" id="time" placeholder="HH:MM" required />
-      <div class="helper-text">Enter time in HH:MM format (e.g., 14:30)</div>
-
-      <label for="vehicle">Vehicle Type:</label>
-      <select id="vehicle" required>
-        <option value="">--Select Vehicle Type--</option>
-        <option value="motorcycle">Motorcycles, Mopeds, Tricycles</option>
-        <option value="car">Cars and Small Vans</option>
-        <option value="largeVan">Large Vans</option>
-        <option value="heavy">Heavy Goods Vehicles</option>
-      </select>
-
-      <button type="button" onclick="calculateFee()">Calculate Fee</button>
+      <!-- Day and Time on the same row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="day">Day</label>
+          <select id="day" required>
+            <option value="">--Select Day--</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+            <option value="Christmas Day">Christmas Day</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="time">Time</label>
+          <input type="time" id="time" placeholder="HH:MM" required>
+          <div class="helper-text">Format: HH:MM (e.g., 14:30)</div>
+        </div>
+      </div>
+      <!-- Vehicle Type on its own row -->
+      <div class="form-group" style="margin-top: 1rem; text-align: left;">
+        <label for="vehicle">Vehicle Type</label>
+        <select id="vehicle" required>
+          <option value="">--Select Vehicle Type--</option>
+          <option value="motorcycle">Motorcycles, Mopeds, Tricycles</option>
+          <option value="car">Cars and Small Vans</option>
+          <option value="largeVan">Large Vans</option>
+          <option value="heavy">Heavy Goods Vehicles</option>
+        </select>
+      </div>
+      <button type="button" class="primary-btn" onclick="calculateFee()">Calculate Fee</button>
     </form>
+    <!-- Hidden result box; shown only after a calculation -->
     <div class="result" id="result"></div>
-    <button type="button" class="more-info-btn" onclick="openModal()">
-      <span class="btn-icon">
-        <!-- Inline SVG for a question mark icon -->
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.88 16h-1.75v-1.75h1.75V18zm2.22-7.75c-.38.38-.67.83-.8 1.37-.1.44-.16.88-.16 1.38h-1.75c0-.6.08-1.2.24-1.77.27-.98.84-1.67 1.64-2.17.95-.59 1.42-1.21 1.42-2.06 0-1.3-1.05-2.35-2.35-2.35S10.65 6.7 10.65 8H8.9c0-2.14 1.75-3.9 3.9-3.9 2.15 0 3.9 1.75 3.9 3.9 0 1.11-.57 1.95-1.35 2.45z"/>
-        </svg>
-      </span>
-      More Info
-    </button>
   </div>
-
-  <!-- Modal Structure -->
-  <div id="modal" class="modal">
+  
+  <!-- Modal Structure for Instructions & Fee Schedule -->
+  <div id="modal" class="modal" role="dialog" aria-labelledby="modalTitle" tabindex="-1">
     <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <h2>Tunnel Charge Timetable</h2>
+      <span id="closeModal" class="close" aria-label="Close">&times;</span>
+      <h2 id="modalTitle">Instructions &amp; Fee Schedule</h2>
+      <p>Enter the day, time, and vehicle type to calculate the tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
       <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
       <p><strong>No Charges:</strong> 22:00 - 06:00 and on Christmas Day</p>
       <h3>Weekdays (Monday to Friday):</h3>
@@ -297,7 +318,7 @@
         <strong>Northbound:</strong> 06:00 - 10:00 (Peak), all other times off-peak<br>
         <strong>Southbound:</strong> 16:00 - 19:00 (Peak), all other times off-peak
       </p>
-      <h3>Weekends (Saturday & Sunday):</h3>
+      <h3>Weekends (Saturday &amp; Sunday):</h3>
       <p>Both directions: Off-peak only (06:00 - 22:00)</p>
       <h3>Fee Rates (Auto Pay):</h3>
       <table>
@@ -338,40 +359,43 @@
       </table>
     </div>
   </div>
-
+  
   <script>
     function calculateFee() {
       const day = document.getElementById("day").value;
       const timeInput = document.getElementById("time").value;
       const vehicle = document.getElementById("vehicle").value;
       const resultDiv = document.getElementById("result");
-
+      
+      // Validate inputs; if any field is missing, show an error message.
       if (!day || !timeInput || !vehicle) {
+        resultDiv.style.display = "block";
         resultDiv.textContent = "Please fill in all fields.";
         return;
       }
-
-      // Parse the time input (HH:MM) into total minutes from midnight.
+      
+      // Convert the time input (HH:MM) into total minutes from midnight.
       const [hourStr, minuteStr] = timeInput.split(":");
       const hours = parseInt(hourStr, 10);
       const minutes = parseInt(minuteStr, 10);
       const totalMinutes = hours * 60 + minutes;
-
-      // No charge applies on Christmas Day or between 22:00 and 06:00.
+      
+      // Determine if no charge applies: on Christmas Day or outside 06:00 - 22:00.
       if (day === "Christmas Day" || totalMinutes < 360 || totalMinutes >= 1320) {
+        resultDiv.style.display = "block";
         resultDiv.textContent = "No charge applies.";
         return;
       }
-
+      
       const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
       const isWeekday = weekdays.includes(day);
-
-      // Peak periods (only on weekdays):
+      
+      // Define peak periods on weekdays:
       // Morning Peak: 06:00 - 10:00 (360 to 600 minutes)
       // Evening Peak: 16:00 - 19:00 (960 to 1140 minutes)
       const inMorningPeak = isWeekday && (totalMinutes >= 360 && totalMinutes < 600);
       const inEveningPeak = isWeekday && (totalMinutes >= 960 && totalMinutes < 1140);
-
+      
       // Fee schedules (Auto Pay rates)
       const feesOffPeak = {
         motorcycle: 1.50,
@@ -379,43 +403,42 @@
         largeVan: 2.50,
         heavy: 5.00
       };
-
+      
       const feesPeak = {
         motorcycle: 2.50,
         car: 4.00,
         largeVan: 6.50,
         heavy: 10.00
       };
-
+      
       let resultHTML = "";
-
-      // When within a peak period, display both peak and off-peak charges.
+      
       if (inMorningPeak) {
         // Morning peak: Northbound is peak; Southbound is off-peak.
         const feeNorth = feesPeak[vehicle];
         const feeSouth = feesOffPeak[vehicle];
-        resultHTML =
-          "<strong>Northbound (Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
-          "<strong>Southbound (Off-Peak):</strong> £" + feeSouth.toFixed(2);
+        resultHTML = "<strong>Northbound (Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
+                     "<strong>Southbound (Off-Peak):</strong> £" + feeSouth.toFixed(2);
       } else if (inEveningPeak) {
         // Evening peak: Southbound is peak; Northbound is off-peak.
         const feeSouth = feesPeak[vehicle];
         const feeNorth = feesOffPeak[vehicle];
-        resultHTML =
-          "<strong>Northbound (Off-Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
-          "<strong>Southbound (Peak):</strong> £" + feeSouth.toFixed(2);
+        resultHTML = "<strong>Northbound (Off-Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
+                     "<strong>Southbound (Peak):</strong> £" + feeSouth.toFixed(2);
       } else {
-        // At all other times, off-peak applies for both directions.
+        // Otherwise, off-peak applies for both directions.
         const fee = feesOffPeak[vehicle];
         resultHTML = "<strong>Charge (Off-Peak):</strong> £" + fee.toFixed(2);
       }
-
+      
+      resultDiv.style.display = "block";
       resultDiv.innerHTML = resultHTML;
     }
-
+    
     // Modal functions
     function openModal() {
       document.getElementById("modal").style.display = "flex";
+      document.getElementById("modal").focus();
     }
     
     function closeModal() {
@@ -424,9 +447,17 @@
     
     document.getElementById("closeModal").addEventListener("click", closeModal);
     
+    // Close the modal when clicking outside the modal content.
     window.addEventListener("click", function(event) {
       const modal = document.getElementById("modal");
       if (event.target === modal) {
+        closeModal();
+      }
+    });
+    
+    // Close modal on Escape key press.
+    window.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") {
         closeModal();
       }
     });
