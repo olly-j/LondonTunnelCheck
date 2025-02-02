@@ -2,52 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <!-- Ensures proper scaling on mobile devices -->
+  <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tunnel Fee Calculator</title>
   <style>
-    /* Reset some defaults */
+    /* Global reset */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
-    /* Apple-inspired font stack and background */
+    
+    /* Animated, colourful, blurry background */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(135deg, #e6f0fa, #f5f7fa);
+      position: relative;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
       padding: 20px;
+      background: #000;
+      overflow: hidden;
     }
-
+    
+    body::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+      background-size: 400% 400%;
+      filter: blur(40px);
+      animation: gradientAnimation 20s ease infinite;
+      z-index: -1;
+    }
+    
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Container styling with border, shadow, and clear boundaries */
     .container {
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
       padding: 2rem;
       max-width: 500px;
       width: 100%;
-      text-align: center;
+      position: relative;
+      z-index: 1;
+      border: 2px solid #e0e0e0;
     }
-
+    
     h1 {
       margin-bottom: 1.5rem;
       color: #333;
       font-size: 1.8rem;
     }
-
+    
     label {
       display: block;
       margin-top: 1rem;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: #555;
       text-align: left;
     }
-
+    
     input, select {
       width: 100%;
       padding: 0.75rem;
@@ -56,30 +81,42 @@
       border-radius: 8px;
       font-size: 1rem;
       outline: none;
-      transition: border 0.3s;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
-
+    
     input:focus, select:focus {
       border-color: #007aff;
+      box-shadow: 0 0 5px rgba(0, 122, 255, 0.5);
     }
-
+    
+    /* Helper text for clarity */
+    .helper-text {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 0.3rem;
+      text-align: left;
+    }
+    
+    /* Improved, modern button design */
     button {
       margin-top: 1.5rem;
       width: 100%;
       padding: 0.75rem;
-      background-color: #007aff;
+      background: linear-gradient(90deg, #007aff, #00c6ff);
       border: none;
       border-radius: 8px;
       color: #fff;
       font-size: 1rem;
+      font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: transform 0.2s ease, background 0.3s ease;
     }
-
+    
     button:hover {
-      background-color: #005bb5;
+      background: linear-gradient(90deg, #005bb5, #009ecb);
+      transform: scale(1.02);
     }
-
+    
     .result {
       margin-top: 1.5rem;
       padding: 1rem;
@@ -89,8 +126,9 @@
       color: #333;
       text-align: left;
       line-height: 1.5;
+      border: 1px solid #ddd;
     }
-
+    
     /* Responsive typography adjustments for smaller screens */
     @media (max-width: 480px) {
       h1 {
@@ -120,7 +158,8 @@
       </select>
 
       <label for="time">Time:</label>
-      <input type="time" id="time" required />
+      <input type="time" id="time" placeholder="HH:MM" required />
+      <div class="helper-text">Enter time in HH:MM format (e.g., 14:30)</div>
 
       <label for="vehicle">Vehicle Type:</label>
       <select id="vehicle" required>
