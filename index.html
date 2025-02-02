@@ -5,6 +5,8 @@
   <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tunnel Fee Calculator</title>
+  <!-- Import Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     /* Global reset */
     *, *::before, *::after {
@@ -12,10 +14,10 @@
       margin: 0;
       padding: 0;
     }
-    
-    /* Animated, colourful, blurry background */
+
+    /* Animated multi-colour gradient background */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
       position: relative;
       min-height: 100vh;
       display: flex;
@@ -25,7 +27,7 @@
       background: #000;
       overflow: hidden;
     }
-    
+
     body::before {
       content: "";
       position: absolute;
@@ -33,47 +35,47 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-      background-size: 400% 400%;
-      filter: blur(40px);
-      animation: gradientAnimation 20s ease infinite;
+      background: linear-gradient(45deg, #f8b195, #f67280, #c06c84, #6c5b7b, #355c7d, #99b898, #feceab);
+      background-size: 300% 300%;
+      animation: gradientShift 15s ease infinite;
+      filter: blur(50px);
       z-index: -1;
     }
-    
-    @keyframes gradientAnimation {
+
+    @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    
-    /* Main container styling */
+
+    /* Container styling */
     .container {
-      background: #fff;
+      background: rgba(255,255,255,0.95);
       border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
       padding: 2rem;
       max-width: 500px;
       width: 100%;
-      position: relative;
-      z-index: 1;
-      border: 2px solid #e0e0e0;
       text-align: center;
+      border: 1px solid #e0e0e0;
     }
-    
+
     h1 {
       margin-bottom: 1.5rem;
       color: #333;
-      font-size: 1.8rem;
+      font-size: 2rem;
+      font-weight: 700;
     }
-    
+
     label {
       display: block;
       margin-top: 1rem;
       font-size: 0.95rem;
       color: #555;
       text-align: left;
+      font-weight: 600;
     }
-    
+
     input, select {
       width: 100%;
       padding: 0.75rem;
@@ -83,22 +85,22 @@
       font-size: 1rem;
       outline: none;
       transition: border-color 0.3s, box-shadow 0.3s;
+      background-color: #fafafa;
     }
-    
+
     input:focus, select:focus {
       border-color: #007aff;
-      box-shadow: 0 0 5px rgba(0, 122, 255, 0.5);
+      box-shadow: 0 0 8px rgba(0, 122, 255, 0.5);
     }
-    
-    /* Helper text */
+
     .helper-text {
       font-size: 0.8rem;
       color: #888;
       margin-top: 0.3rem;
       text-align: left;
     }
-    
-    /* Button styling */
+
+    /* Primary button styling */
     button {
       margin-top: 1.5rem;
       width: 100%;
@@ -108,21 +110,23 @@
       border-radius: 8px;
       color: #fff;
       font-size: 1rem;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
       transition: transform 0.2s ease, background 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    
+
     button:hover {
       background: linear-gradient(90deg, #005bb5, #009ecb);
       transform: scale(1.02);
     }
-    
-    /* Result styling */
+
     .result {
       margin-top: 1.5rem;
       padding: 1rem;
-      background: #f8f8f8;
+      background: #f0f0f0;
       border-radius: 8px;
       font-size: 1.1rem;
       color: #333;
@@ -130,17 +134,24 @@
       line-height: 1.5;
       border: 1px solid #ddd;
     }
-    
-    /* Responsive typography adjustments for smaller screens */
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.6rem;
-      }
-      label, input, select, button {
-        font-size: 0.95rem;
-      }
+
+    /* More Info button styling */
+    .more-info-btn {
+      background: #28a745;
+      margin-top: 1rem;
     }
-    
+
+    .more-info-btn:hover {
+      background: #218838;
+    }
+
+    /* Icon styling for buttons */
+    .btn-icon {
+      margin-right: 8px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
     /* Modal styling */
     .modal {
       display: none; /* Hidden by default */
@@ -155,7 +166,7 @@
       justify-content: center;
       align-items: center;
     }
-    
+
     .modal-content {
       background-color: #fff;
       border-radius: 12px;
@@ -166,41 +177,44 @@
       position: relative;
       max-height: 90vh;
       overflow-y: auto;
+      text-align: left;
     }
-    
+
     .modal-content h2,
     .modal-content h3 {
       margin-top: 10px;
       margin-bottom: 10px;
+      color: #333;
     }
-    
+
     .modal-content p {
       margin-bottom: 10px;
       line-height: 1.5;
+      color: #555;
     }
-    
+
     .modal-content table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
-    
+
     .modal-content table, 
     .modal-content th, 
     .modal-content td {
       border: 1px solid #ddd;
     }
-    
+
     .modal-content th, 
     .modal-content td {
       padding: 8px;
       text-align: left;
     }
-    
+
     .modal-content th {
       background-color: #f2f2f2;
     }
-    
+
     .close {
       position: absolute;
       top: 10px;
@@ -210,10 +224,20 @@
       font-weight: bold;
       cursor: pointer;
     }
-    
+
     .close:hover,
     .close:focus {
       color: #000;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      label, input, select, button {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
@@ -250,8 +274,15 @@
       <button type="button" onclick="calculateFee()">Calculate Fee</button>
     </form>
     <div class="result" id="result"></div>
-    <!-- More Info Button -->
-    <button type="button" onclick="openModal()" style="background: #28a745;">More Info</button>
+    <button type="button" class="more-info-btn" onclick="openModal()">
+      <span class="btn-icon">
+        <!-- Inline SVG for a question mark icon -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.88 16h-1.75v-1.75h1.75V18zm2.22-7.75c-.38.38-.67.83-.8 1.37-.1.44-.16.88-.16 1.38h-1.75c0-.6.08-1.2.24-1.77.27-.98.84-1.67 1.64-2.17.95-.59 1.42-1.21 1.42-2.06 0-1.3-1.05-2.35-2.35-2.35S10.65 6.7 10.65 8H8.9c0-2.14 1.75-3.9 3.9-3.9 2.15 0 3.9 1.75 3.9 3.9 0 1.11-.57 1.95-1.35 2.45z"/>
+        </svg>
+      </span>
+      More Info
+    </button>
   </div>
 
   <!-- Modal Structure -->
@@ -391,10 +422,8 @@
       document.getElementById("modal").style.display = "none";
     }
     
-    // Attach close event for the close button
     document.getElementById("closeModal").addEventListener("click", closeModal);
     
-    // Close the modal when clicking outside of the modal content
     window.addEventListener("click", function(event) {
       const modal = document.getElementById("modal");
       if (event.target === modal) {
