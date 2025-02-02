@@ -7,6 +7,35 @@
   <title>Tunnel Fee Calculator</title>
   <!-- Import Google Fonts: Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- SEO and Structured Data (Optional but recommended) -->
+  <meta name="description" content="Tunnel Fee Calculator is a modern, responsive tool for calculating toll fees for Blackwall and Silvertown Tunnels. Features include a live countdown timer, fee schedule with table, multi-language support, and a full-size map popup." />
+  <meta name="keywords" content="Tunnel Fee Calculator, Blackwall Tunnel, Silvertown Tunnel, toll fee, countdown timer, fee table, multi-language, responsive web app" />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://olly-j.github.io/LondonTunnelCheck/" />
+  <meta property="og:title" content="Tunnel Fee Calculator" />
+  <meta property="og:description" content="Calculate toll fees for Blackwall and Silvertown Tunnels with our responsive tool featuring a live countdown timer, fee schedule table, multi-language support, and a full-size map popup." />
+  <meta property="og:url" content="https://olly-j.github.io/LondonTunnelCheck/" />
+  <meta property="og:image" content="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tunnel Fee Calculator" />
+  <meta name="twitter:description" content="A modern tool for calculating toll fees for Blackwall and Silvertown Tunnels." />
+  <meta name="twitter:image" content="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Tunnel Fee Calculator",
+    "url": "https://olly-j.github.io/LondonTunnelCheck/",
+    "description": "A modern, responsive web tool for calculating toll fees for Blackwall and Silvertown Tunnels. Features a live countdown timer, fee schedule with table, multi-language support, and a full-size map popup.",
+    "applicationCategory": "WebApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
   <style>
     /* Global Reset */
     *, *::before, *::after {
@@ -21,11 +50,12 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      /* Allow vertical scrolling */
+      overflow-y: auto;
       justify-content: center;
       align-items: center;
       padding: 20px;
       background: #000;
-      overflow: hidden;
     }
     body::before {
       content: "";
@@ -51,17 +81,15 @@
       max-width: 1000px;
     }
     header {
-      position: relative;
       margin-bottom: 20px;
       text-align: center;
+      /* Ensure there is space for language flags above the title */
+      padding-top: 10px;
     }
-    /* Flag-based Language Selector (top-right of header) */
+    /* Flag-based Language Selector (now inline at the top-right of the header) */
     #languageSelector {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      gap: 5px;
+      text-align: right;
+      margin-bottom: 10px;
     }
     .flag-btn {
       background: transparent;
@@ -287,11 +315,10 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .close:hover,
-    .close:focus {
+    .close:focus, .close:hover {
       color: #000;
     }
-    /* Responsive adjustments: Two-column layout on wider screens */
+    /* Responsive: Two-column layout on wider screens */
     @media (min-width: 800px) {
       .content-wrapper {
         flex-direction: row;
@@ -323,7 +350,7 @@
 </head>
 <body>
   <header>
-    <!-- Flag-based Language Selector (Top-Right) -->
+    <!-- Flag-based Language Selector (Displayed inline at top) -->
     <div id="languageSelector">
       <button class="flag-btn" onclick="setLanguage('en')" aria-label="English">🇬🇧</button>
       <button class="flag-btn" onclick="setLanguage('fr')" aria-label="Français">🇫🇷</button>
@@ -338,7 +365,7 @@
     <div class="content-wrapper">
       <!-- Left: Form Container -->
       <div class="form-container">
-        <!-- Info button (question mark) -->
+        <!-- Info Button (Question Mark) -->
         <button class="info-btn" aria-label="Instructions & Fee Schedule" onclick="openModal('instructions')">?</button>
         <!-- Countdown Timer (with ARIA live region) -->
         <div id="countdown" class="countdown" aria-live="polite"></div>
@@ -401,7 +428,7 @@
   <!-- Modal for Instructions & Fee Schedule -->
   <div id="modalInstructions" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalInstructionsTitle" tabindex="-1">
     <div class="modal-content">
-      <span id="closeModalInstructions" class="close" aria-label="Close">&times;</span>
+      <span id="closeModalInstructions" class="close" aria-label="Close" tabindex="0">&times;</span>
       <h2 id="modalInstructionsTitle">Instructions & Fee Schedule</h2>
       <div id="modalInstructionsContent">
         <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
@@ -458,7 +485,7 @@
   <!-- Modal for Full-Size Image -->
   <div id="modalImage" class="modal" role="dialog" aria-modal="true" tabindex="-1">
     <div class="modal-content">
-      <span id="closeModalImage" class="close" aria-label="Close">&times;</span>
+      <span id="closeModalImage" class="close" aria-label="Close" tabindex="0">&times;</span>
       <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" alt="Full Map of Blackwall and Silvertown Tunnels" />
     </div>
   </div>
@@ -813,8 +840,18 @@
     document.getElementById("closeModalInstructions").addEventListener("click", function() {
       closeModal("modalInstructions");
     });
+    document.getElementById("closeModalInstructions").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        closeModal("modalInstructions");
+      }
+    });
     document.getElementById("closeModalImage").addEventListener("click", function() {
       closeModal("modalImage");
+    });
+    document.getElementById("closeModalImage").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        closeModal("modalImage");
+      }
     });
     window.addEventListener("click", function(event) {
       const modalInstructions = document.getElementById("modalInstructions");
