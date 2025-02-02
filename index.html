@@ -49,16 +49,32 @@
       100% { background-position: 0% 50%; }
     }
     
+    /* Page Layout */
+    header, main, footer {
+      width: 100%;
+      max-width: 1000px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+    
     /* Wrapper for the two-column layout */
     .content-wrapper {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      width: 100%;
-      max-width: 1000px;
     }
     
-    /* Left column: form container */
+    /* Left: Form Container */
     .form-container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
@@ -70,7 +86,7 @@
       border: 1px solid #e0e0e0;
     }
     
-    /* Right column: image & details */
+    /* Right: Image Container */
     .image-container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
@@ -86,6 +102,12 @@
       height: auto;
       border-radius: 8px;
       cursor: pointer;
+      /* Make the image focusable */
+      outline: none;
+    }
+    
+    .image-container img:focus {
+      border: 2px solid #007aff;
     }
     
     .image-container p {
@@ -126,7 +148,7 @@
       font-weight: 700;
     }
     
-    /* Countdown styling */
+    /* Countdown styling with ARIA live region */
     .countdown {
       font-size: 1.1rem;
       font-weight: 600;
@@ -190,7 +212,7 @@
       transform: scale(1.02);
     }
     
-    /* Result box styling (hidden until a result is available) */
+    /* Result box styling (hidden until a result is available) with ARIA live region */
     .result {
       margin-top: 1.5rem;
       padding: 1rem;
@@ -313,7 +335,7 @@
     }
     
     /* Footer styling */
-    .footer {
+    footer {
       margin-top: 20px;
       text-align: center;
       font-size: 0.85rem;
@@ -322,73 +344,80 @@
   </style>
 </head>
 <body>
-  <div class="content-wrapper">
-    <!-- Left: Form Container -->
-    <div class="form-container">
-      <!-- Info button (question mark icon) -->
-      <button class="info-btn" aria-label="Instructions &amp; Fee Schedule" onclick="openModal('instructions')">?</button>
-      <!-- Countdown Timer -->
-      <div id="countdown" class="countdown"></div>
-      <h1>Tunnel Fee Calculator</h1>
-      <form id="feeForm">
-        <div class="form-group">
-          <label for="day">Day</label>
-          <select id="day" required>
-            <option value="">--Select Day--</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-            <option value="Christmas Day">Christmas Day</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="time">Time</label>
-          <input type="time" id="time" placeholder="HH:MM" required>
-          <div class="helper-text">Format: HH:MM (e.g., 14:30)</div>
-        </div>
-        <div class="form-group">
-          <label for="vehicle">Vehicle Type</label>
-          <select id="vehicle" required>
-            <option value="">--Select Vehicle Type--</option>
-            <option value="motorcycle">Motorcycles, Mopeds, Tricycles</option>
-            <option value="car">Cars and Small Vans</option>
-            <option value="largeVan">Large Vans</option>
-            <option value="heavy">Heavy Goods Vehicles</option>
-          </select>
-        </div>
-        <button type="button" class="primary-btn" onclick="calculateFee()">Calculate Fee</button>
-      </form>
-      <!-- Hidden result box; shown only after a calculation -->
-      <div class="result" id="result"></div>
-    </div>
-    
-    <!-- Right: Image Container (displayed side-by-side on wide screens) -->
-    <div class="image-container">
-      <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" 
-           alt="Map of Blackwall and Silvertown Tunnels" 
-           onclick="openModal('image')" />
-      <p>
-        <strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br>
-        <strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>
-        Both tunnels connect the A102 between the south and north sides of the river. Charges come into effect from 7 April 2025.
-      </p>
-    </div>
-  </div>
+  <header>
+    <h1>Tunnel Fee Calculator</h1>
+  </header>
   
-  <!-- Footer -->
-  <footer class="footer">
+  <main>
+    <div class="content-wrapper">
+      <!-- Left: Form Container -->
+      <div class="form-container">
+        <!-- Info button (question mark icon) -->
+        <button class="info-btn" aria-label="Instructions &amp; Fee Schedule" onclick="openModal('instructions')">?</button>
+        <!-- Countdown Timer with ARIA live region -->
+        <div id="countdown" class="countdown" aria-live="polite"></div>
+        <form id="feeForm">
+          <div class="form-group">
+            <label for="day">Day</label>
+            <select id="day" required>
+              <option value="">--Select Day--</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+              <option value="Christmas Day">Christmas Day</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="time">Time</label>
+            <input type="time" id="time" placeholder="HH:MM" required>
+            <div class="helper-text">Format: HH:MM (e.g., 14:30)</div>
+          </div>
+          <div class="form-group">
+            <label for="vehicle">Vehicle Type</label>
+            <select id="vehicle" required>
+              <option value="">--Select Vehicle Type--</option>
+              <option value="motorcycle">Motorcycles, Mopeds, Tricycles</option>
+              <option value="car">Cars and Small Vans</option>
+              <option value="largeVan">Large Vans</option>
+              <option value="heavy">Heavy Goods Vehicles</option>
+            </select>
+          </div>
+          <button type="button" class="primary-btn" onclick="calculateFee()">Calculate Fee</button>
+        </form>
+        <!-- Hidden result box with ARIA live region -->
+        <div class="result" id="result" aria-live="polite"></div>
+      </div>
+      
+      <!-- Right: Image Container -->
+      <div class="image-container">
+        <!-- The image is made keyboard accessible via tabindex and keydown -->
+        <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" 
+             alt="Map of Blackwall and Silvertown Tunnels" 
+             tabindex="0"
+             onkeydown="if(event.key==='Enter'){ openModal('image'); }"
+             onclick="openModal('image')" />
+        <p>
+          <strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br>
+          <strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>
+          Both tunnels connect the A102 between the south and north sides of the river. Charges come into effect from 7 April 2025.
+        </p>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
     &copy; <script>document.write(new Date().getFullYear());</script> Olly Jeffers. All rights reserved.
   </footer>
   
-  <!-- Modal Structure for Instructions & Fee Schedule -->
-  <div id="modalInstructions" class="modal" role="dialog" aria-labelledby="modalTitle" tabindex="-1">
+  <!-- Modal for Instructions & Fee Schedule -->
+  <div id="modalInstructions" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalInstructionsTitle" tabindex="-1">
     <div class="modal-content">
       <span id="closeModalInstructions" class="close" aria-label="Close">&times;</span>
-      <h2 id="modalTitle">Instructions &amp; Fee Schedule</h2>
+      <h2 id="modalInstructionsTitle">Instructions &amp; Fee Schedule</h2>
       <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
       <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
       <p><strong>No Charges:</strong> 22:00 - 06:00 and on Christmas Day</p>
@@ -439,8 +468,8 @@
     </div>
   </div>
   
-  <!-- Modal Structure for Full-Size Image -->
-  <div id="modalImage" class="modal" role="dialog" tabindex="-1">
+  <!-- Modal for Full-Size Image -->
+  <div id="modalImage" class="modal" role="dialog" aria-modal="true" tabindex="-1">
     <div class="modal-content">
       <span id="closeModalImage" class="close" aria-label="Close">&times;</span>
       <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" alt="Full Map of Blackwall and Silvertown Tunnels" />
@@ -448,6 +477,60 @@
   </div>
   
   <script>
+    // Global variable to store the previously focused element
+    let previousActiveElement = null;
+
+    // Function to trap focus within a modal
+    function trapFocus(modal) {
+      const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]';
+      const focusableElements = modal.querySelectorAll(focusableSelectors);
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      modal.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) {
+            // If Shift + Tab pressed
+            if (document.activeElement === firstElement) {
+              e.preventDefault();
+              lastElement.focus();
+            }
+          } else {
+            // Tab pressed
+            if (document.activeElement === lastElement) {
+              e.preventDefault();
+              firstElement.focus();
+            }
+          }
+        }
+      });
+    }
+
+    // Function to open a modal by type ("instructions" or "image")
+    function openModal(type) {
+      previousActiveElement = document.activeElement;
+      if (type === "instructions") {
+        const modal = document.getElementById("modalInstructions");
+        modal.style.display = "flex";
+        trapFocus(modal);
+        modal.focus();
+      } else if (type === "image") {
+        const modal = document.getElementById("modalImage");
+        modal.style.display = "flex";
+        trapFocus(modal);
+        modal.focus();
+      }
+    }
+
+    // Function to close a modal by ID and return focus
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = "none";
+      if (previousActiveElement) {
+        previousActiveElement.focus();
+      }
+    }
+
     // Countdown Timer: Target Date is 7 April 2025
     const targetDate = new Date("2025-04-07T00:00:00");
     const countdownElem = document.getElementById("countdown");
@@ -548,33 +631,7 @@
       resultDiv.innerHTML = resultHTML;
     }
     
-    // Modal functions
-    // Opens modal based on type: "instructions" or "image"
-    function openModal(type) {
-      if (type === "instructions") {
-        document.getElementById("modalInstructions").style.display = "flex";
-        document.getElementById("modalInstructions").focus();
-      } else if (type === "image") {
-        document.getElementById("modalImage").style.display = "flex";
-        document.getElementById("modalImage").focus();
-      }
-    }
-    
-    function closeModal(modalId) {
-      document.getElementById(modalId).style.display = "none";
-    }
-    
-    // Close modal when clicking on close button (instructions)
-    document.getElementById("closeModalInstructions").addEventListener("click", function() {
-      closeModal("modalInstructions");
-    });
-    
-    // Close modal when clicking on close button (image)
-    document.getElementById("closeModalImage").addEventListener("click", function() {
-      closeModal("modalImage");
-    });
-    
-    // Close the modal when clicking outside the modal content for both modals
+    // Close modal when clicking outside the modal content for both modals
     window.addEventListener("click", function(event) {
       const modalInstructions = document.getElementById("modalInstructions");
       const modalImage = document.getElementById("modalImage");
