@@ -5,26 +5,26 @@
   <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tunnel Fee Calculator</title>
-  
+
   <!-- SEO Meta Tags -->
   <meta name="description" content="Tunnel Fee Calculator is a modern, responsive tool for calculating toll fees for Blackwall and Silvertown Tunnels. Features include a live countdown timer, fee schedule with table, multi-language support, and a full-size map popup." />
   <meta name="keywords" content="Tunnel Fee Calculator, Blackwall Tunnel, Silvertown Tunnel, toll fee, countdown timer, fee table, multi-language, responsive web app" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://olly-j.github.io/LondonTunnelCheck/" />
-  
+
   <!-- Open Graph Tags -->
   <meta property="og:title" content="Tunnel Fee Calculator" />
   <meta property="og:description" content="Calculate toll fees for Blackwall and Silvertown Tunnels with our responsive tool featuring a live countdown timer, fee schedule table, multi-language support, and a full-size map popup." />
   <meta property="og:url" content="https://olly-j.github.io/LondonTunnelCheck/" />
   <meta property="og:image" content="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" />
   <meta property="og:type" content="website" />
-  
+
   <!-- Twitter Card Tags -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Tunnel Fee Calculator" />
   <meta name="twitter:description" content="A modern tool for calculating toll fees for Blackwall and Silvertown Tunnels." />
   <meta name="twitter:image" content="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" />
-  
+
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
   {
@@ -41,10 +41,10 @@
     }
   }
   </script>
-  
+
   <!-- Import Google Fonts: Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  
+
   <style>
     /* Global Reset */
     *, *::before, *::after {
@@ -52,6 +52,7 @@
       margin: 0;
       padding: 0;
     }
+
     /* Animated multi-color gradient background */
     body {
       font-family: 'Inter', sans-serif;
@@ -59,7 +60,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-y: auto; /* Allow vertical scrolling */
+      overflow-y: auto; /* Allow vertical scrolling on mobile */
       justify-content: center;
       align-items: center;
       padding: 20px;
@@ -83,7 +84,7 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    /* Semantic Landmarks */
+
     header, main, footer {
       width: 100%;
       max-width: 1000px;
@@ -91,10 +92,11 @@
     header {
       margin-bottom: 20px;
       text-align: center;
-      padding-top: 10px; /* Space for language flags */
+      padding-top: 10px; /* extra space for language flags */
       position: relative;
     }
-    /* Flag-based Language Selector (Displayed at top-right as inline block) */
+
+    /* Flag-based Language Selector (top right) */
     #languageSelector {
       text-align: right;
       margin-bottom: 10px;
@@ -108,12 +110,14 @@
     .flag-btn:focus {
       outline: 2px solid #007aff;
     }
+
     h1 {
       margin-bottom: 1rem;
       color: #333;
       font-size: 2rem;
       font-weight: 700;
     }
+
     main {
       display: flex;
       flex-direction: column;
@@ -125,6 +129,7 @@
       flex-direction: column;
       gap: 20px;
     }
+
     /* Form Container (Left Column) */
     .form-container {
       background: rgba(255, 255, 255, 0.95);
@@ -136,6 +141,7 @@
       border: 1px solid #e0e0e0;
       flex: 1;
     }
+
     /* Image Container (Right Column) */
     .image-container {
       background: rgba(255, 255, 255, 0.95);
@@ -163,6 +169,7 @@
       text-align: left;
       line-height: 1.4;
     }
+
     /* Info Button (Question Mark) */
     .info-btn {
       position: absolute;
@@ -184,6 +191,7 @@
     .info-btn:hover {
       background: #005bb5;
     }
+
     /* Countdown Timer */
     .countdown {
       font-size: 1.1rem;
@@ -191,6 +199,7 @@
       color: #d9534f;
       margin-bottom: 1rem;
     }
+
     /* Form Items */
     .form-group {
       margin-bottom: 1rem;
@@ -222,6 +231,7 @@
       color: #888;
       margin-top: 0.3rem;
     }
+
     /* Primary Button */
     .primary-btn {
       margin-top: 1.5rem;
@@ -240,6 +250,7 @@
       background: linear-gradient(90deg, #005bb5, #009ecb);
       transform: scale(1.02);
     }
+
     /* Result Box */
     .result {
       margin-top: 1.5rem;
@@ -253,6 +264,7 @@
       border: 1px solid #ddd;
       display: none;
     }
+
     /* Modal Styling */
     .modal {
       display: none;
@@ -329,6 +341,7 @@
     .close:focus, .close:hover {
       color: #000;
     }
+
     /* Responsive: Two-column layout on wider screens */
     @media (min-width: 800px) {
       .content-wrapper {
@@ -350,6 +363,7 @@
         font-size: 0.95rem;
       }
     }
+
     /* Footer Styling */
     footer {
       margin-top: 20px;
@@ -361,7 +375,6 @@
 </head>
 <body>
   <header>
-    <!-- Flag-based Language Selector (Top, inline at right) -->
     <div id="languageSelector">
       <button class="flag-btn" onclick="setLanguage('en')" aria-label="English">🇬🇧</button>
       <button class="flag-btn" onclick="setLanguage('fr')" aria-label="Français">🇫🇷</button>
@@ -376,9 +389,7 @@
     <div class="content-wrapper">
       <!-- Left: Form Container -->
       <div class="form-container">
-        <!-- Info Button (Question Mark) -->
         <button class="info-btn" aria-label="Instructions & Fee Schedule" onclick="openModal('instructions')">?</button>
-        <!-- Countdown Timer (with ARIA live region) -->
         <div id="countdown" class="countdown" aria-live="polite"></div>
         <form id="feeForm">
           <div class="form-group">
@@ -412,7 +423,6 @@
           </div>
           <button type="button" class="primary-btn" id="calculateButton" onclick="calculateFee()">Calculate Fee</button>
         </form>
-        <!-- Result Box (hidden until a calculation is performed) -->
         <div class="result" id="result" aria-live="polite"></div>
       </div>
       
@@ -442,53 +452,7 @@
       <span id="closeModalInstructions" class="close" aria-label="Close" tabindex="0">&times;</span>
       <h2 id="modalInstructionsTitle">Instructions & Fee Schedule</h2>
       <div id="modalInstructionsContent">
-        <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
-        <p><strong>Charging Times: 06:00 - 22:00</strong> (charges apply per tunnel crossing)</p>
-        <p><strong>No Charges: 22:00 - 06:00 and on Christmas Day</strong></p>
-        <h3>Weekdays (Monday to Friday):</h3>
-        <p>
-          <strong>Northbound: 06:00 - 10:00 (Peak)</strong><br>
-          <strong>Southbound: 16:00 - 19:00 (Peak)</strong>
-        </p>
-        <h3>Weekends (Saturday & Sunday):</h3>
-        <p>Both directions: Off-peak only (06:00 - 22:00)</p>
-        <h3>Fee Rates (Auto Pay):</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Vehicle Type</th>
-              <th>Off-Peak</th>
-              <th>Peak</th>
-              <th>Phone/Online</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Motorcycles, Mopeds, Tricycles</td>
-              <td>£1.50</td>
-              <td>£2.50</td>
-              <td>£2.50</td>
-            </tr>
-            <tr>
-              <td>Cars and Small Vans</td>
-              <td>£1.50</td>
-              <td>£4.00</td>
-              <td>£4.00</td>
-            </tr>
-            <tr>
-              <td>Large Vans</td>
-              <td>£2.50</td>
-              <td>£6.50</td>
-              <td>£6.50</td>
-            </tr>
-            <tr>
-              <td>Heavy Goods Vehicles</td>
-              <td>£5.00</td>
-              <td>£10.00</td>
-              <td>£10.00</td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Dynamically inserted via setLanguage(...) -->
       </div>
     </div>
   </div>
@@ -503,17 +467,13 @@
   
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      /**********************
-       * Global Language Variable
-       **********************/
       let currentLanguage = 'en';
+      let previousActiveElement = null;
+      let countdownInterval;
       
-      /**********************
-       * TRANSLATIONS
-       **********************/
       const translations = {
-        en: {
-          header: "Tunnel Fee Calculator",
+        /* Insert your translations here exactly as previously defined */
+        en: {header: "Tunnel Fee Calculator",
           countdown: "Charges come into effect in {days}d {hours}h {minutes}m {seconds}s",
           countdownActive: "Charges are now in effect.",
           dayLabel: "Day",
@@ -538,10 +498,8 @@
           tablePeak: "Peak",
           tablePhone: "Phone/Online",
           footer: "Olly Jeffers. All rights reserved.",
-          tunnelInfo: "<strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br><strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>Both tunnels connect the A102 between the south and north sides of the river. Charges come into effect from 7 April 2025."
-        },
-        fr: {
-          header: "Calculateur de péage du tunnel",
+          tunnelInfo: "<strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br><strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>Both tunnels connect the A102 between the south and north sides of the river. Charges come into effect from 7 April 2025."},
+        fr: {header: "Calculateur de péage du tunnel",
           countdown: "Les frais entreront en vigueur dans {days}j {hours}h {minutes}m {seconds}s",
           countdownActive: "Les frais sont désormais en vigueur.",
           dayLabel: "Jour",
@@ -566,10 +524,8 @@
           tablePeak: "Heures de pointe",
           tablePhone: "Téléphone/En ligne",
           footer: "Olly Jeffers. Tous droits réservés.",
-          tunnelInfo: "<strong>Tunnel Blackwall</strong> relie l'A102 sur le côté ouest du Greenwich Peninsula à l'A12 à Poplar.<br><br><strong>Tunnel Silvertown</strong> relie le côté est du Greenwich Peninsula au Lower Lea Crossing A1026, A13 et d'autres destinations locales.<br><br>Les deux tunnels relient l'A102 entre le sud et le nord de la rivière. Les frais entrent en vigueur à partir du 7 avril 2025."
-        },
-        de: {
-          header: "Tunnelgebührenrechner",
+          tunnelInfo: "<strong>Tunnel Blackwall</strong> relie l'A102 sur le côté ouest du Greenwich Peninsula à l'A12 à Poplar.<br><br><strong>Tunnel Silvertown</strong> relie le côté est du Greenwich Peninsula au Lower Lea Crossing A1026, A13 et d'autres destinations locales.<br><br>Les deux tunnels relient l'A102 entre le sud et le nord de la rivière. Les frais entrent en vigueur à partir du 7 avril 2025."},
+        de: {header: "Tunnelgebührenrechner",
           countdown: "Die Gebühren treten in {days}T {hours}S {minutes}m {seconds}s in Kraft",
           countdownActive: "Die Gebühren sind jetzt in Kraft.",
           dayLabel: "Tag",
@@ -594,10 +550,8 @@
           tablePeak: "Stoßzeit",
           tablePhone: "Telefon/Online",
           footer: "Olly Jeffers. Alle Rechte vorbehalten.",
-          tunnelInfo: "<strong>Blackwall Tunnel</strong> verbindet die A102 auf der Westseite der Greenwich Peninsula mit der A12 bei Poplar.<br><br><strong>Silvertown Tunnel</strong> verbindet die Ostseite der Greenwich Peninsula mit der A1026 Lower Lea Crossing, A13 und weiteren lokalen Zielen.<br><br>Beide Tunnel verbinden die A102 zwischen den Südstaaten und Nordseiten des Flusses. Die Gebühren gelten ab dem 7. April 2025."
-        },
-        es: {
-          header: "Calculadora de peajes de túnel",
+          tunnelInfo: "<strong>Blackwall Tunnel</strong> verbindet die A102 auf der Westseite der Greenwich Peninsula mit der A12 bei Poplar.<br><br><strong>Silvertown Tunnel</strong> verbindet die Ostseite der Greenwich Peninsula mit der A1026 Lower Lea Crossing, A13 und weiteren lokalen Zielen.<br><br>Beide Tunnel verbinden die A102 zwischen den Südstaaten und Nordseiten des Flusses. Die Gebühren gelten ab dem 7. April 2025."},
+        es: {header: "Calculadora de peajes de túnel",
           countdown: "Los cargos entrarán en vigor en {days}d {hours}h {minutes}m {seconds}s",
           countdownActive: "Los cargos ya están en vigor.",
           dayLabel: "Día",
@@ -622,10 +576,8 @@
           tablePeak: "Horas pico",
           tablePhone: "Teléfono/En línea",
           footer: "Olly Jeffers. Todos los derechos reservados.",
-          tunnelInfo: "<strong>Túnel Blackwall</strong> conecta la A102 en el lado oeste del Greenwich Peninsula con la A12 en Poplar.<br><br><strong>Túnel Silvertown</strong> conecta el lado este del Greenwich Peninsula con la A1026 Lower Lea Crossing, A13 y otros destinos locales.<br><br>Ambos túneles conectan la A102 entre los lados sur y norte del río. Los cargos entran en vigor el 7 de abril de 2025."
-        },
-        zh: {
-          header: "隧道收费计算器",
+          tunnelInfo: "<strong>Túnel Blackwall</strong> conecta la A102 en el lado oeste del Greenwich Peninsula con la A12 en Poplar.<br><br><strong>Túnel Silvertown</strong> conecta el lado este del Greenwich Peninsula con la A1026 Lower Lea Crossing, A13 y otros destinos locales.<br><br>Ambos túneles conectan la A102 entre los lados sur y norte del río. Los cargos entran en vigor el 7 de abril de 2025."},
+        zh: {header: "隧道收费计算器",
           countdown: "距离收费生效还有 {days}天 {hours}小时 {minutes}分 {seconds}秒",
           countdownActive: "收费已生效。",
           dayLabel: "日期",
@@ -650,22 +602,68 @@
           tablePeak: "高峰",
           tablePhone: "电话/在线",
           footer: "Olly Jeffers. 版权所有。",
-          tunnelInfo: "<strong>Blackwall隧道</strong>连接Greenwich Peninsula西侧的A102与Poplar的A12。<br><br><strong>Silvertown隧道</strong>连接Greenwich Peninsula东侧与A1026 Lower Lea Crossing、A13及其他本地目的地。<br><br>两条隧道连接A102，将河流两侧相连。收费自2025年4月7日起生效。"
+          tunnelInfo: "<strong>Blackwall隧道</strong>连接Greenwich Peninsula西侧的A102与Poplar的A12。<br><br><strong>Silvertown隧道</strong>连接Greenwich Peninsula东侧与A1026 Lower Lea Crossing、A13及其他本地目的地。<br><br>两条隧道连接A102，将河流两侧相连。收费自2025年4月7日起生效。"}
+      };
+      
+      function trapFocus(modal) {
+        const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+        const focusableElements = modal.querySelectorAll(focusableSelectors);
+        if (!focusableElements.length) return;
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        modal.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab') {
+            if (e.shiftKey) {
+              if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+              }
+            } else {
+              if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+              }
+            }
+          }
+        });
+      }
+      
+      window.openModal = function(type) {
+        previousActiveElement = document.activeElement;
+        let modal = null;
+        if (type === "instructions") {
+          modal = document.getElementById("modalInstructions");
+        } else if (type === "image") {
+          modal = document.getElementById("modalImage");
+        }
+        if (modal) {
+          modal.style.display = "flex";
+          trapFocus(modal);
+          modal.focus();
         }
       };
       
-      /**********************
-       * LANGUAGE SWITCHER
-       **********************/
-      function setLanguage(lang) {
+      window.closeModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.style.display = "none";
+        }
+        if (previousActiveElement) {
+          previousActiveElement.focus();
+        }
+      };
+      
+      window.setLanguage = function(lang) {
         currentLanguage = lang;
         const texts = translations[lang];
+        
         document.getElementById("pageHeader").textContent = texts.header;
         document.getElementById("dayLabel").textContent = texts.dayLabel;
         document.getElementById("timeLabel").textContent = texts.timeLabel;
         document.getElementById("vehicleLabel").textContent = texts.vehicleLabel;
         document.getElementById("timeHelper").textContent = texts.timeHelper;
         document.getElementById("calculateButton").textContent = texts.calculateButton;
+        
         document.getElementById("modalInstructionsTitle").textContent = texts.instructionsTitle;
         document.getElementById("modalInstructionsContent").innerHTML = `
           <p>${texts.instructionsText}</p>
@@ -716,67 +714,17 @@
             </tbody>
           </table>
         `;
+        
         document.getElementById("tunnelInfo").innerHTML = texts.tunnelInfo;
         document.getElementById("pageFooter").innerHTML = `&copy; ${new Date().getFullYear()} ${texts.footer}`;
+        
         updateCountdown();
-      }
-      setLanguage("en");
+      };
       
-      /**********************
-       * ACCESSIBILITY & MODALS
-       **********************/
-      let previousActiveElement = null;
-      function trapFocus(modal) {
-        const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-        const focusableElements = modal.querySelectorAll(focusableSelectors);
-        if (!focusableElements.length) return;
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-        modal.addEventListener('keydown', function(e) {
-          if (e.key === 'Tab') {
-            if (e.shiftKey) {
-              if (document.activeElement === firstElement) {
-                e.preventDefault();
-                lastElement.focus();
-              }
-            } else {
-              if (document.activeElement === lastElement) {
-                e.preventDefault();
-                firstElement.focus();
-              }
-            }
-          }
-        });
-      }
-      function openModal(type) {
-        previousActiveElement = document.activeElement;
-        let modal = null;
-        if (type === "instructions") {
-          modal = document.getElementById("modalInstructions");
-        } else if (type === "image") {
-          modal = document.getElementById("modalImage");
-        }
-        if (modal) {
-          modal.style.display = "flex";
-          trapFocus(modal);
-          modal.focus();
-        }
-      }
-      function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-          modal.style.display = "none";
-        }
-        if (previousActiveElement) {
-          previousActiveElement.focus();
-        }
-      }
-      
-      /**********************
-       * COUNTDOWN TIMER
-       **********************/
+      /* Countdown Timer Logic */
       const targetDate = new Date("2025-04-07T00:00:00");
       const countdownElem = document.getElementById("countdown");
+      
       function updateCountdown() {
         const now = new Date();
         const diff = targetDate - now;
@@ -789,45 +737,55 @@
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
         const seconds = Math.floor((diff / 1000) % 60);
+        
         let countText = translations[currentLanguage].countdown;
-        countText = countText.replace("{days}", days)
-                             .replace("{hours}", hours)
-                             .replace("{minutes}", minutes)
-                             .replace("{seconds}", seconds);
+        countText = countText
+          .replace("{days}", days)
+          .replace("{hours}", hours)
+          .replace("{minutes}", minutes)
+          .replace("{seconds}", seconds);
+        
         countdownElem.textContent = countText;
       }
-      const countdownInterval = setInterval(updateCountdown, 1000);
+      countdownInterval = setInterval(updateCountdown, 1000);
       updateCountdown();
-      
-      /**********************
-       * FEE CALCULATION
-       **********************/
-      function calculateFee() {
+
+      /* Fee Calculation */
+      window.calculateFee = function() {
         const day = document.getElementById("day").value;
         const timeInput = document.getElementById("time").value;
         const vehicle = document.getElementById("vehicle").value;
         const resultDiv = document.getElementById("result");
+        
         if (!day || !timeInput || !vehicle) {
           resultDiv.style.display = "block";
           resultDiv.textContent = translations[currentLanguage].fillFieldsError;
           return;
         }
+        
         const [hourStr, minuteStr] = timeInput.split(":");
         const hours = parseInt(hourStr, 10);
         const minutes = parseInt(minuteStr, 10);
         const totalMinutes = hours * 60 + minutes;
+        
         if (day === "Christmas Day" || totalMinutes < 360 || totalMinutes >= 1320) {
           resultDiv.style.display = "block";
           resultDiv.textContent = translations[currentLanguage].noCharge;
           return;
         }
+        
         const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
         const isWeekday = weekdays.includes(day);
+        
+        /* Peak periods */
         const inMorningPeak = isWeekday && (totalMinutes >= 360 && totalMinutes < 600);
         const inEveningPeak = isWeekday && (totalMinutes >= 960 && totalMinutes < 1140);
+        
         const feesOffPeak = { motorcycle: 1.50, car: 1.50, largeVan: 2.50, heavy: 5.00 };
         const feesPeak = { motorcycle: 2.50, car: 4.00, largeVan: 6.50, heavy: 10.00 };
+        
         let resultHTML = "";
+        
         if (inMorningPeak) {
           const feeNorth = feesPeak[vehicle];
           const feeSouth = feesOffPeak[vehicle];
@@ -842,13 +800,12 @@
           const fee = feesOffPeak[vehicle];
           resultHTML = "<strong>Charge (Off-Peak):</strong> £" + fee.toFixed(2);
         }
+        
         resultDiv.style.display = "block";
         resultDiv.innerHTML = resultHTML;
-      }
+      };
       
-      /**********************
-       * MODAL EVENT LISTENERS
-       **********************/
+      /* Modal Event Listeners */
       document.getElementById("closeModalInstructions").addEventListener("click", function() {
         closeModal("modalInstructions");
       });
@@ -866,12 +823,12 @@
         }
       });
       window.addEventListener("click", function(event) {
-        const modalInstructions = document.getElementById("modalInstructions");
-        const modalImage = document.getElementById("modalImage");
-        if (event.target === modalInstructions) {
+        const instructionsModal = document.getElementById("modalInstructions");
+        const imageModal = document.getElementById("modalImage");
+        if (event.target === instructionsModal) {
           closeModal("modalInstructions");
         }
-        if (event.target === modalImage) {
+        if (event.target === imageModal) {
           closeModal("modalImage");
         }
       });
@@ -882,11 +839,8 @@
         }
       });
       
-      // Attach fee calculation function to the global scope
-      window.calculateFee = calculateFee;
-      window.setLanguage = setLanguage;
-      window.openModal = openModal;
-      window.closeModal = closeModal;
+      /* Language defaults to English */
+      setLanguage("en");
     });
   </script>
 </body>
