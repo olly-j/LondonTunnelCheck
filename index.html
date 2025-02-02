@@ -2,84 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Tunnel Crossing Fee Calculator</title>
+  <!-- Ensures proper scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tunnel Fee Calculator</title>
   <style>
     /* Reset some defaults */
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
+    /* Apple-inspired font stack and background */
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #e6f0fa, #f5f7fa);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 1rem;
+      padding: 20px;
     }
-    
+
     .container {
       background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      max-width: 400px;
+      max-width: 500px;
       width: 100%;
-    }
-    
-    h1 {
       text-align: center;
-      margin-bottom: 1rem;
-      color: #333;
     }
-    
+
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #333;
+      font-size: 1.8rem;
+    }
+
     label {
       display: block;
       margin-top: 1rem;
-      font-weight: bold;
+      font-size: 0.9rem;
       color: #555;
+      text-align: left;
     }
-    
-    input,
-    select {
+
+    input, select {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.75rem;
       margin-top: 0.5rem;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
       font-size: 1rem;
+      outline: none;
+      transition: border 0.3s;
     }
-    
+
+    input:focus, select:focus {
+      border-color: #007aff;
+    }
+
     button {
       margin-top: 1.5rem;
       width: 100%;
-      padding: 0.7rem;
-      background: #74ebd5;
+      padding: 0.75rem;
+      background-color: #007aff;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      color: #fff;
       font-size: 1rem;
-      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
-      color: #333;
+      transition: background-color 0.3s;
     }
-    
+
     button:hover {
-      background: #acb6e5;
+      background-color: #005bb5;
     }
-    
+
     .result {
       margin-top: 1.5rem;
       padding: 1rem;
-      background: #f0f0f0;
-      border-radius: 5px;
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: bold;
+      background: #f8f8f8;
+      border-radius: 8px;
+      font-size: 1.1rem;
       color: #333;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    /* Responsive typography adjustments for smaller screens */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      label, input, select, button {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
@@ -124,31 +143,27 @@
       const vehicle = document.getElementById("vehicle").value;
       const resultDiv = document.getElementById("result");
 
-      // Ensure all fields are filled.
       if (!day || !timeInput || !vehicle) {
         resultDiv.textContent = "Please fill in all fields.";
         return;
       }
 
-      // Parse time input (HH:MM) into total minutes from midnight.
+      // Parse the time input (HH:MM) into total minutes from midnight.
       const [hourStr, minuteStr] = timeInput.split(":");
       const hours = parseInt(hourStr, 10);
       const minutes = parseInt(minuteStr, 10);
       const totalMinutes = hours * 60 + minutes;
 
-      // Define free periods:
-      // - Christmas Day
-      // - Between 22:00 (1320 minutes) and 06:00 (360 minutes)
+      // No charge applies on Christmas Day or between 22:00 and 06:00.
       if (day === "Christmas Day" || totalMinutes < 360 || totalMinutes >= 1320) {
         resultDiv.textContent = "No charge applies.";
         return;
       }
 
-      // Determine if the day is a weekday (Monday to Friday).
       const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
       const isWeekday = weekdays.includes(day);
 
-      // Define peak periods (only on weekdays):
+      // Peak periods (only on weekdays):
       // Morning Peak: 06:00 - 10:00 (360 to 600 minutes)
       // Evening Peak: 16:00 - 19:00 (960 to 1140 minutes)
       const inMorningPeak = isWeekday && (totalMinutes >= 360 && totalMinutes < 600);
@@ -171,25 +186,25 @@
 
       let resultHTML = "";
 
-      // If in one of the peak windows, display two prices.
+      // When within a peak period, display both peak and off-peak charges.
       if (inMorningPeak) {
         // Morning peak: Northbound is peak; Southbound is off-peak.
         const feeNorth = feesPeak[vehicle];
         const feeSouth = feesOffPeak[vehicle];
-        resultHTML = 
-          "Northbound (Peak): £" + feeNorth.toFixed(2) + "<br>" +
-          "Southbound (Off-Peak): £" + feeSouth.toFixed(2);
+        resultHTML =
+          "<strong>Northbound (Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
+          "<strong>Southbound (Off-Peak):</strong> £" + feeSouth.toFixed(2);
       } else if (inEveningPeak) {
         // Evening peak: Southbound is peak; Northbound is off-peak.
         const feeSouth = feesPeak[vehicle];
         const feeNorth = feesOffPeak[vehicle];
-        resultHTML = 
-          "Northbound (Off-Peak): £" + feeNorth.toFixed(2) + "<br>" +
-          "Southbound (Peak): £" + feeSouth.toFixed(2);
+        resultHTML =
+          "<strong>Northbound (Off-Peak):</strong> £" + feeNorth.toFixed(2) + "<br>" +
+          "<strong>Southbound (Peak):</strong> £" + feeSouth.toFixed(2);
       } else {
         // At all other times, off-peak applies for both directions.
         const fee = feesOffPeak[vehicle];
-        resultHTML = "Charge (Off-Peak): £" + fee.toFixed(2);
+        resultHTML = "<strong>Charge (Off-Peak):</strong> £" + fee.toFixed(2);
       }
 
       resultDiv.innerHTML = resultHTML;
