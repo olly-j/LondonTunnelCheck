@@ -5,22 +5,27 @@
   <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tunnel Fee Calculator</title>
-  <!-- Import Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- SEO and Structured Data (Optional but recommended) -->
+  
+  <!-- SEO Meta Tags (optional but recommended) -->
   <meta name="description" content="Tunnel Fee Calculator is a modern, responsive tool for calculating toll fees for Blackwall and Silvertown Tunnels. Features include a live countdown timer, fee schedule with table, multi-language support, and a full-size map popup." />
   <meta name="keywords" content="Tunnel Fee Calculator, Blackwall Tunnel, Silvertown Tunnel, toll fee, countdown timer, fee table, multi-language, responsive web app" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://olly-j.github.io/LondonTunnelCheck/" />
+  
+  <!-- Open Graph Tags -->
   <meta property="og:title" content="Tunnel Fee Calculator" />
   <meta property="og:description" content="Calculate toll fees for Blackwall and Silvertown Tunnels with our responsive tool featuring a live countdown timer, fee schedule table, multi-language support, and a full-size map popup." />
   <meta property="og:url" content="https://olly-j.github.io/LondonTunnelCheck/" />
   <meta property="og:image" content="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" />
   <meta property="og:type" content="website" />
+  
+  <!-- Twitter Card Tags -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Tunnel Fee Calculator" />
   <meta name="twitter:description" content="A modern tool for calculating toll fees for Blackwall and Silvertown Tunnels." />
   <meta name="twitter:image" content="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" />
+  
+  <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -36,6 +41,10 @@
     }
   }
   </script>
+  
+  <!-- Import Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <style>
     /* Global Reset */
     *, *::before, *::after {
@@ -50,8 +59,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      /* Allow vertical scrolling */
-      overflow-y: auto;
+      overflow-y: auto; /* Allow vertical scrolling */
       justify-content: center;
       align-items: center;
       padding: 20px;
@@ -83,10 +91,10 @@
     header {
       margin-bottom: 20px;
       text-align: center;
-      /* Ensure there is space for language flags above the title */
-      padding-top: 10px;
+      padding-top: 10px; /* Extra space for language selector */
+      position: relative;
     }
-    /* Flag-based Language Selector (now inline at the top-right of the header) */
+    /* Flag-based Language Selector (displayed inline at the top) */
     #languageSelector {
       text-align: right;
       margin-bottom: 10px;
@@ -350,7 +358,7 @@
 </head>
 <body>
   <header>
-    <!-- Flag-based Language Selector (Displayed inline at top) -->
+    <!-- Flag-based Language Selector (Top-Right) -->
     <div id="languageSelector">
       <button class="flag-btn" onclick="setLanguage('en')" aria-label="English">🇬🇧</button>
       <button class="flag-btn" onclick="setLanguage('fr')" aria-label="Français">🇫🇷</button>
@@ -491,6 +499,11 @@
   </div>
   
   <script>
+    /**********************
+     * Global Language Variable
+     **********************/
+    let currentLanguage = 'en';
+    
     /**********************
      * TRANSLATIONS
      **********************/
@@ -641,6 +654,7 @@
      * LANGUAGE SWITCHER
      **********************/
     function setLanguage(lang) {
+      currentLanguage = lang;
       const texts = translations[lang];
       // Update header text
       document.getElementById("pageHeader").textContent = texts.header;
@@ -706,7 +720,7 @@
       document.getElementById("tunnelInfo").innerHTML = texts.tunnelInfo;
       // Update footer text
       document.getElementById("pageFooter").innerHTML = `&copy; ${new Date().getFullYear()} ${texts.footer}`;
-      // Update countdown text to current language (if applicable)
+      // Update countdown to current language
       updateCountdown();
     }
     // Initially set language to English
@@ -769,7 +783,7 @@
       const now = new Date();
       const diff = targetDate - now;
       if (diff <= 0) {
-        countdownElem.textContent = translations.en.countdownActive;
+        countdownElem.textContent = translations[currentLanguage].countdownActive;
         clearInterval(countdownInterval);
         return;
       }
@@ -777,7 +791,7 @@
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
-      let countText = translations.en.countdown;
+      let countText = translations[currentLanguage].countdown;
       countText = countText.replace("{days}", days)
                            .replace("{hours}", hours)
                            .replace("{minutes}", minutes)
@@ -797,7 +811,7 @@
       const resultDiv = document.getElementById("result");
       if (!day || !timeInput || !vehicle) {
         resultDiv.style.display = "block";
-        resultDiv.textContent = translations.en.fillFieldsError;
+        resultDiv.textContent = translations[currentLanguage].fillFieldsError;
         return;
       }
       const [hourStr, minuteStr] = timeInput.split(":");
@@ -806,7 +820,7 @@
       const totalMinutes = hours * 60 + minutes;
       if (day === "Christmas Day" || totalMinutes < 360 || totalMinutes >= 1320) {
         resultDiv.style.display = "block";
-        resultDiv.textContent = translations.en.noCharge;
+        resultDiv.textContent = translations[currentLanguage].noCharge;
         return;
       }
       const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
