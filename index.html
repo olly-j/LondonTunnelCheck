@@ -58,18 +58,27 @@
     header {
       text-align: center;
       margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
+      position: relative;
     }
     
-    /* Language selector styling */
-    .language-selector {
-      font-size: 0.9rem;
-      padding: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+    /* Language Selector using flags */
+    #languageSelector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+    }
+    
+    .flag-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .flag-btn:focus {
+      outline: 2px solid #007aff;
     }
     
     main {
@@ -152,7 +161,6 @@
       background: #005bb5;
     }
     
-    /* Heading */
     h1 {
       margin-bottom: 1rem;
       color: #333;
@@ -357,14 +365,14 @@
 </head>
 <body>
   <header>
-    <!-- Language Selector -->
-    <select id="langSelector" class="language-selector" onchange="setLanguage(this.value)">
-      <option value="en">English</option>
-      <option value="fr">Français</option>
-      <option value="de">Deutsch</option>
-      <option value="es">Español</option>
-      <option value="zh">中文</option>
-    </select>
+    <!-- Flag-based Language Selector in Top-Right -->
+    <div id="languageSelector">
+      <button class="flag-btn" onclick="setLanguage('en')" aria-label="English">🇬🇧</button>
+      <button class="flag-btn" onclick="setLanguage('fr')" aria-label="Français">🇫🇷</button>
+      <button class="flag-btn" onclick="setLanguage('de')" aria-label="Deutsch">🇩🇪</button>
+      <button class="flag-btn" onclick="setLanguage('es')" aria-label="Español">🇪🇸</button>
+      <button class="flag-btn" onclick="setLanguage('zh')" aria-label="中文">🇨🇳</button>
+    </div>
     <h1 id="pageHeader">Tunnel Fee Calculator</h1>
   </header>
   
@@ -687,24 +695,40 @@
           </thead>
           <tbody>
             <tr>
-              <td>${texts.tableVehicle}</td>
-              <td>${texts.tableOffPeak}</td>
-              <td>${texts.tablePeak}</td>
-              <td>${texts.tablePhone}</td>
+              <td>Motorcycles, Mopeds, Tricycles</td>
+              <td>£1.50</td>
+              <td>£2.50</td>
+              <td>£2.50</td>
+            </tr>
+            <tr>
+              <td>Cars and Small Vans</td>
+              <td>£1.50</td>
+              <td>£4.00</td>
+              <td>£4.00</td>
+            </tr>
+            <tr>
+              <td>Large Vans</td>
+              <td>£2.50</td>
+              <td>£6.50</td>
+              <td>£6.50</td>
+            </tr>
+            <tr>
+              <td>Heavy Goods Vehicles</td>
+              <td>£5.00</td>
+              <td>£10.00</td>
+              <td>£10.00</td>
             </tr>
           </tbody>
         </table>
       `;
-      // Reattach the event listener for closing instructions modal
-      document.getElementById("closeModalInstructions").addEventListener("click", function() {
-        closeModal("modalInstructions");
-      });
-      
       // Update image container tunnel info text
       document.getElementById("tunnelInfo").innerHTML = texts.tunnelInfo;
       
-      // Update footer
+      // Update footer text (if desired, otherwise static already)
       document.getElementById("pageFooter").innerHTML = `&copy; ${new Date().getFullYear()} ${texts.footer}`;
+      
+      // (Optional) Update the countdown text if needed
+      updateCountdown(); // re-run countdown update to use current language
     }
     
     // Initially set language to English
@@ -725,13 +749,11 @@
       modal.addEventListener('keydown', function(e) {
         if (e.key === 'Tab') {
           if (e.shiftKey) {
-            // If Shift + Tab is pressed
             if (document.activeElement === firstElement) {
               e.preventDefault();
               lastElement.focus();
             }
           } else {
-            // If Tab is pressed
             if (document.activeElement === lastElement) {
               e.preventDefault();
               firstElement.focus();
@@ -777,7 +799,7 @@
       const diff = targetDate - now;
       
       if (diff <= 0) {
-        countdownElem.textContent = translations.en.countdownActive; // or you could update it per selected language
+        countdownElem.textContent = translations.en.countdownActive;
         clearInterval(countdownInterval);
         return;
       }
@@ -787,9 +809,7 @@
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
       
-      // Replace tokens in the countdown text
       let countText = translations.en.countdown;
-      // If needed, you can update the countdown string in the currently selected language.
       countText = countText.replace("{days}", days)
                            .replace("{hours}", hours)
                            .replace("{minutes}", minutes)
@@ -811,7 +831,7 @@
       
       if (!day || !timeInput || !vehicle) {
         resultDiv.style.display = "block";
-        resultDiv.textContent = translations.en.fillFieldsError; // Alternatively, use current language
+        resultDiv.textContent = translations.en.fillFieldsError;
         return;
       }
       
