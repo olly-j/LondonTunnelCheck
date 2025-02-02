@@ -48,20 +48,53 @@
       100% { background-position: 0% 50%; }
     }
     
-    /* Main container styling */
-    .container {
+    /* Wrapper for the two-column layout */
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+    
+    /* Left column: form container */
+    .form-container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
       padding: 2rem;
-      max-width: 500px;
-      width: 100%;
+      flex: 1;
       position: relative;
       text-align: center;
       border: 1px solid #e0e0e0;
     }
     
-    /* Small info (question mark) button in top-right */
+    /* Right column: image & details */
+    .image-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      padding: 2rem;
+      flex: 1;
+      border: 1px solid #e0e0e0;
+      text-align: center;
+    }
+    
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    
+    .image-container p {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #555;
+      text-align: left;
+      line-height: 1.4;
+    }
+    
+    /* Small info (question mark) button in top-right of form container */
     .info-btn {
       position: absolute;
       top: 16px;
@@ -85,22 +118,23 @@
     }
     
     h1 {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       color: #333;
       font-size: 2rem;
       font-weight: 700;
     }
     
-    /* Form row: Day and Time side by side */
-    .form-row {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
+    /* Countdown styling */
+    .countdown {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #d9534f;
+      margin-bottom: 1rem;
     }
     
+    /* Form items as a vertical list */
     .form-group {
-      flex: 1;
-      min-width: 150px;
+      margin-bottom: 1rem;
       text-align: left;
     }
     
@@ -189,7 +223,7 @@
       padding: 20px;
       max-width: 600px;
       width: 90%;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       position: relative;
       max-height: 90vh;
       overflow-y: auto;
@@ -246,7 +280,20 @@
       color: #000;
     }
     
-    /* Responsive adjustments */
+    /* Responsive adjustments: side-by-side layout on wider screens */
+    @media (min-width: 800px) {
+      .content-wrapper {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+      .form-container, .image-container {
+        flex: 1;
+      }
+      .image-container {
+        margin-left: 20px;
+      }
+    }
+    
     @media (max-width: 480px) {
       h1 {
         font-size: 1.6rem;
@@ -254,20 +301,19 @@
       label, input, select, .primary-btn {
         font-size: 0.95rem;
       }
-      .form-row {
-        flex-direction: column;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Info button (question mark icon) -->
-    <button class="info-btn" aria-label="Instructions & Fee Schedule" onclick="openModal()">?</button>
-    <h1>Tunnel Fee Calculator</h1>
-    <form id="feeForm">
-      <!-- Day and Time on the same row -->
-      <div class="form-row">
+  <div class="content-wrapper">
+    <!-- Left: Form Container -->
+    <div class="form-container">
+      <!-- Info button (question mark icon) -->
+      <button class="info-btn" aria-label="Instructions &amp; Fee Schedule" onclick="openModal()">?</button>
+      <!-- Countdown Timer -->
+      <div id="countdown" class="countdown"></div>
+      <h1>Tunnel Fee Calculator</h1>
+      <form id="feeForm">
         <div class="form-group">
           <label for="day">Day</label>
           <select id="day" required>
@@ -287,22 +333,31 @@
           <input type="time" id="time" placeholder="HH:MM" required>
           <div class="helper-text">Format: HH:MM (e.g., 14:30)</div>
         </div>
-      </div>
-      <!-- Vehicle Type on its own row -->
-      <div class="form-group" style="margin-top: 1rem; text-align: left;">
-        <label for="vehicle">Vehicle Type</label>
-        <select id="vehicle" required>
-          <option value="">--Select Vehicle Type--</option>
-          <option value="motorcycle">Motorcycles, Mopeds, Tricycles</option>
-          <option value="car">Cars and Small Vans</option>
-          <option value="largeVan">Large Vans</option>
-          <option value="heavy">Heavy Goods Vehicles</option>
-        </select>
-      </div>
-      <button type="button" class="primary-btn" onclick="calculateFee()">Calculate Fee</button>
-    </form>
-    <!-- Hidden result box; shown only after a calculation -->
-    <div class="result" id="result"></div>
+        <div class="form-group">
+          <label for="vehicle">Vehicle Type</label>
+          <select id="vehicle" required>
+            <option value="">--Select Vehicle Type--</option>
+            <option value="motorcycle">Motorcycles, Mopeds, Tricycles</option>
+            <option value="car">Cars and Small Vans</option>
+            <option value="largeVan">Large Vans</option>
+            <option value="heavy">Heavy Goods Vehicles</option>
+          </select>
+        </div>
+        <button type="button" class="primary-btn" onclick="calculateFee()">Calculate Fee</button>
+      </form>
+      <!-- Hidden result box; shown only after a calculation -->
+      <div class="result" id="result"></div>
+    </div>
+    
+    <!-- Right: Image Container (displayed side-by-side on wide screens) -->
+    <div class="image-container">
+      <img src="https://tfl.gov.uk/ruc-cdn/static/cms/images/tuc-where-and-when-map.png" alt="Map of Blackwall and Silvertown Tunnels">
+      <p>
+        <strong>Blackwall Tunnel</strong> connects the A102 on the west side of the Greenwich Peninsula to the A12 at Poplar.<br><br>
+        <strong>Silvertown Tunnel</strong> connects the east side of the Greenwich Peninsula to the A1026 Lower Lea Crossing, A13, and other local destinations.<br><br>
+        Both tunnels connect the A102 between the south and north sides of the river. Charges come into effect from 7 April 2025.
+      </p>
+    </div>
   </div>
   
   <!-- Modal Structure for Instructions & Fee Schedule -->
@@ -310,7 +365,7 @@
     <div class="modal-content">
       <span id="closeModal" class="close" aria-label="Close">&times;</span>
       <h2 id="modalTitle">Instructions &amp; Fee Schedule</h2>
-      <p>Enter the day, time, and vehicle type to calculate the tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
+      <p>Enter the day, time, and vehicle type to calculate your tunnel fee. The fee depends on whether your journey occurs during peak or off-peak periods.</p>
       <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
       <p><strong>No Charges:</strong> 22:00 - 06:00 and on Christmas Day</p>
       <h3>Weekdays (Monday to Friday):</h3>
@@ -361,6 +416,32 @@
   </div>
   
   <script>
+    // Countdown Timer: Target Date is 7 April 2025
+    const targetDate = new Date("2025-04-07T00:00:00");
+    const countdownElem = document.getElementById("countdown");
+    
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+      
+      if (diff <= 0) {
+        countdownElem.textContent = "Charges are now in effect.";
+        clearInterval(countdownInterval);
+        return;
+      }
+      
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      
+      countdownElem.textContent = `Charges come into effect in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+    
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown(); // initial call
+    
+    // Calculation Function
     function calculateFee() {
       const day = document.getElementById("day").value;
       const timeInput = document.getElementById("time").value;
