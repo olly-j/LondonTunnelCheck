@@ -46,7 +46,7 @@
       100% { background-position: 0% 50%; }
     }
     
-    /* Container styling with border, shadow, and clear boundaries */
+    /* Main container styling */
     .container {
       background: #fff;
       border-radius: 16px;
@@ -57,6 +57,7 @@
       position: relative;
       z-index: 1;
       border: 2px solid #e0e0e0;
+      text-align: center;
     }
     
     h1 {
@@ -89,7 +90,7 @@
       box-shadow: 0 0 5px rgba(0, 122, 255, 0.5);
     }
     
-    /* Helper text for clarity */
+    /* Helper text */
     .helper-text {
       font-size: 0.8rem;
       color: #888;
@@ -97,7 +98,7 @@
       text-align: left;
     }
     
-    /* Improved, modern button design */
+    /* Button styling */
     button {
       margin-top: 1.5rem;
       width: 100%;
@@ -117,6 +118,7 @@
       transform: scale(1.02);
     }
     
+    /* Result styling */
     .result {
       margin-top: 1.5rem;
       padding: 1rem;
@@ -137,6 +139,81 @@
       label, input, select, button {
         font-size: 0.95rem;
       }
+    }
+    
+    /* Modal styling */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-content h2,
+    .modal-content h3 {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .modal-content p {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    
+    .modal-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    
+    .modal-content table, 
+    .modal-content th, 
+    .modal-content td {
+      border: 1px solid #ddd;
+    }
+    
+    .modal-content th, 
+    .modal-content td {
+      padding: 8px;
+      text-align: left;
+    }
+    
+    .modal-content th {
+      background-color: #f2f2f2;
+    }
+    
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #000;
     }
   </style>
 </head>
@@ -173,6 +250,62 @@
       <button type="button" onclick="calculateFee()">Calculate Fee</button>
     </form>
     <div class="result" id="result"></div>
+    <!-- More Info Button -->
+    <button type="button" onclick="openModal()" style="background: #28a745;">More Info</button>
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2>Tunnel Charge Timetable</h2>
+      <p><strong>Charging Times:</strong> 06:00 - 22:00 (charges apply per tunnel crossing)</p>
+      <p><strong>No Charges:</strong> 22:00 - 06:00 and on Christmas Day</p>
+      <h3>Weekdays (Monday to Friday):</h3>
+      <p>
+        <strong>Northbound:</strong> 06:00 - 10:00 (Peak), all other times off-peak<br>
+        <strong>Southbound:</strong> 16:00 - 19:00 (Peak), all other times off-peak
+      </p>
+      <h3>Weekends (Saturday & Sunday):</h3>
+      <p>Both directions: Off-peak only (06:00 - 22:00)</p>
+      <h3>Fee Rates (Auto Pay):</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Vehicle Type</th>
+            <th>Off-Peak</th>
+            <th>Peak</th>
+            <th>Phone/Online</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Motorcycles, Mopeds, Tricycles</td>
+            <td>£1.50</td>
+            <td>£2.50</td>
+            <td>£2.50</td>
+          </tr>
+          <tr>
+            <td>Cars and Small Vans</td>
+            <td>£1.50</td>
+            <td>£4.00</td>
+            <td>£4.00</td>
+          </tr>
+          <tr>
+            <td>Large Vans</td>
+            <td>£2.50</td>
+            <td>£6.50</td>
+            <td>£6.50</td>
+          </tr>
+          <tr>
+            <td>Heavy Goods Vehicles</td>
+            <td>£5.00</td>
+            <td>£10.00</td>
+            <td>£10.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
@@ -248,6 +381,26 @@
 
       resultDiv.innerHTML = resultHTML;
     }
+
+    // Modal functions
+    function openModal() {
+      document.getElementById("modal").style.display = "flex";
+    }
+    
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+    
+    // Attach close event for the close button
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    
+    // Close the modal when clicking outside of the modal content
+    window.addEventListener("click", function(event) {
+      const modal = document.getElementById("modal");
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
   </script>
 </body>
 </html>
